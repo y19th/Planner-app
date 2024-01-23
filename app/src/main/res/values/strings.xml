@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Planner-app</string>
+    <string name="app_title">Daily planner</string>
+    <string name="tasks_for_today">You have %d tasks for today</string>
+    <string name="deadline_pattern">deadline: %s</string>
+    <string name="button_done">Task done</string>
+    <string name="button_cancel">Cancel task</string>
+</resources>
