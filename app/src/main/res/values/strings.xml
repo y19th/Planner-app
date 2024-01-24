@@ -8,4 +8,5 @@
     <string name="home_destination">My tasks</string>
     <string name="add_destination">Add task</string>
     <string name="setting_destination">Settings</string>
+    <string name="setting_screen">Settings</string>
 </resources>
