@@ -1,19 +1,42 @@
 package com.example.planner_app.ui.theme
 
 import android.app.Activity
-import android.os.Build
+import android.util.Log
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import com.example.planner_app.navigation.models.Destinations
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
@@ -47,7 +70,7 @@ private val LightColorScheme = lightColorScheme(
 fun MainTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     dynamicColor: Boolean = true,
-    content: @Composable () -> Unit
+    content: @Composable (PaddingValues, NavHostController) -> Unit
 ) {
     val colorScheme = when {
        /* dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
@@ -67,9 +90,117 @@ fun MainTheme(
         }
     }
 
+    val navController = rememberNavController()
+
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
-        content = content
-    )
+        typography = Typography
+    ) {
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            containerColor = MaterialTheme.colorScheme.surface,
+            bottomBar = {
+                MainBottomBar(navController = navController)
+            },
+            content = { padding ->
+                content(padding,navController)
+            }
+        )
+    }
+}
+
+
+@Composable
+fun MainBottomBar(
+    navController: NavController
+) {
+    /*TODO fix the problem with contentColor, selectedColor and background color*/
+
+    val bottomBarColors = rememberBottomBarColors()
+
+    BottomNavigation(
+        modifier = Modifier
+            .border(
+                width = 0.5.dp,
+                shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp),
+                color = MaterialTheme.colorScheme.outline
+            )
+            .clip(
+                shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp)
+            )
+        ,
+        backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
+        elevation = 4.dp
+    ) {
+        val destinations = rememberBottomBarDestinations()
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+
+        destinations.forEach { destination ->
+
+            val isSelected = navBackStackEntry?.destination?.hierarchy?.any {
+                it.route == destination.route.name
+            } == true
+
+            BottomNavigationItem(
+                selected = isSelected,
+                onClick = {
+                    navController.navigate(destination.route.name) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+
+                        launchSingleTop = true
+
+                        restoreState = true
+                    }
+                },
+                icon = {
+                    Icon(
+                        imageVector = destination.icon,
+                        contentDescription = null,
+                        tint = if(isSelected) bottomBarColors.selectedContent else bottomBarColors.content
+                    )
+                },
+                label = {
+                    Text(
+                        text = stringResource(id = destination.label),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = if(isSelected) bottomBarColors.selectedContent else bottomBarColors.content
+                    )
+                }
+            )
+        }
+    }
+}
+
+@Stable
+@Composable
+fun rememberBottomBarColors(): BottomBarColors {
+    with(MaterialTheme.colorScheme) {
+        return remember {
+            BottomBarColors(
+                background = surfaceVariant,
+                content = onSurfaceVariant,
+                selectedContent = primary
+            )
+        }
+    }
+}
+
+data class BottomBarColors(
+    val background: Color,
+    val content: Color,
+    val selectedContent: Color
+)
+
+@Stable
+@Composable
+fun rememberBottomBarDestinations(): List<Destinations> {
+    return rememberSaveable {
+        listOf(
+            Destinations.HomeDestination,
+            Destinations.AddDestination,
+            Destinations.SettingsDestination
+        )
+    }
 }

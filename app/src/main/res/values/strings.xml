@@ -5,4 +5,7 @@
     <string name="deadline_pattern">deadline: %s</string>
     <string name="button_done">Task done</string>
     <string name="button_cancel">Cancel task</string>
+    <string name="home_destination">My tasks</string>
+    <string name="add_destination">Add task</string>
+    <string name="setting_destination">Settings</string>
 </resources>

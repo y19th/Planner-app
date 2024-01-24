@@ -1,9 +1,8 @@
-package com.example.planner_app
+package com.example.planner_app.presentation.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -15,7 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -23,24 +22,31 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.example.planner_app.R
+import com.example.planner_app.domain.models.TaskColors
+import com.example.planner_app.domain.models.TaskPin
+import com.example.planner_app.domain.models.TaskStatus
+import com.example.planner_app.presentation.components.Divider
+import com.example.planner_app.presentation.components.HorizontalSpacer
+import com.example.planner_app.presentation.components.Pin
+import com.example.planner_app.presentation.components.VerticalSpacer
 import com.example.planner_app.ui.theme.OnSuccess
 import com.example.planner_app.ui.theme.OnSuccessContainer
 import com.example.planner_app.ui.theme.Success
 import com.example.planner_app.ui.theme.SuccessContainer
 
 @Composable
-fun MainScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(
+    modifier: Modifier = Modifier,
+    navController: NavController
+) {
     Column(
         modifier = modifier.fillMaxSize()
     ) {
@@ -81,32 +87,18 @@ fun MainScreen(modifier: Modifier = Modifier) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-
-
-            TaskItem(
-                taskTitle = "Cooking and Cleaning",
-                taskPins = listOf(TaskPin(name = "important"), TaskPin(name = "home based")),
-                taskContent = "wash the dishes and cook the dinner. after that pet the cat and feed oleg",
-                status = TaskStatus.IN_PROGRESS
-            )
-            
-            VerticalSpacer(height = 12.dp)
-
-            TaskItem(
-                taskTitle = "Cooking and Cleaning",
-                taskPins = listOf(TaskPin(name = "important"), TaskPin(name = "home based")),
-                taskContent = "wash the dishes and cook the dinner. after that pet the cat and feed oleg",
-                status = TaskStatus.COMPLETED
-            )
-
-            VerticalSpacer(height = 12.dp)
-
-            TaskItem(
-                taskTitle = "Cooking and Cleaning",
-                taskPins = listOf(TaskPin(name = "important"), TaskPin(name = "home based")),
-                taskContent = "wash the dishes and cook the dinner. after that pet the cat and feed oleg",
-                status = TaskStatus.CANCELLED
-            )
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                items(5){
+                    TaskItem(
+                        taskTitle = "Cooking and Cleaning",
+                        taskPins = listOf(TaskPin(name = "important"), TaskPin(name = "home based")),
+                        taskContent = "wash the dishes and cook the dinner. after that pet the cat and feed oleg",
+                        status = TaskStatus.IN_PROGRESS
+                    )
+                }
+            }
         }
     }
 }
@@ -243,70 +235,6 @@ fun TaskItem(
 }
 
 @Composable
-fun Pin(
-    modifier: Modifier = Modifier,
-    pinTitle: String = "pin",
-    backgroundColor: Color = MaterialTheme.colorScheme.secondary,
-    textColor: Color = MaterialTheme.colorScheme.onSecondary
-) {
-    Box(
-        modifier = Modifier
-            .background(
-                color = backgroundColor,
-                shape = RoundedCornerShape(15.dp)
-            )
-            .padding(vertical = 4.dp, horizontal = 8.dp)
-            .then(modifier)
-    ) {
-        Text(
-            text = pinTitle,
-            style = MaterialTheme.typography.labelSmall,
-            color = textColor
-        )
-    }
-}
-
-@Composable
-fun VerticalSpacer(
-    modifier: Modifier = Modifier,
-    height: Dp
-) {
-    Spacer(modifier = Modifier
-        .height(height)
-        .then(modifier)
-    )
-}
-
-@Composable
-fun HorizontalSpacer(
-    modifier: Modifier = Modifier,
-    width: Dp
-) {
-    Spacer(modifier = Modifier
-        .width(width)
-        .then(modifier)
-    )
-}
-
-@Composable
-fun Divider(
-    modifier: Modifier = Modifier,
-    height: Dp = 0.25.dp,
-    color: Color = MaterialTheme.colorScheme.outlineVariant
-) {
-    Spacer(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(height)
-            .background(
-                color = color,
-                shape = RectangleShape
-            )
-            .then(modifier)
-    )
-}
-
-@Composable
 fun rememberColorGroup(status: TaskStatus): TaskColors {
     val scheme = MaterialTheme.colorScheme
     return when(status) {
@@ -350,26 +278,3 @@ fun rememberColorGroup(status: TaskStatus): TaskColors {
     }
 }
 
-
-@Immutable
-data class TaskColors(
-    val container: Color,
-    val onContainer: Color,
-    val pin: Color,
-    val onPin: Color,
-    val done: Color? = null,
-    val onDone: Color? = null,
-    val cancel: Color? = null,
-    val onCancel: Color? = null
-)
-
-@Immutable
-data class TaskPin(
-    /*TODO remove color and add importance(or something like that)*/
-    val name: String = "pin",
-    val color: Color = Color.Cyan
-)
-
-enum class TaskStatus {
-    CANCELLED,IN_PROGRESS,COMPLETED
-}
