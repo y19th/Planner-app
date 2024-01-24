@@ -22,6 +22,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -41,6 +43,10 @@ import com.example.planner_app.ui.theme.OnSuccess
 import com.example.planner_app.ui.theme.OnSuccessContainer
 import com.example.planner_app.ui.theme.Success
 import com.example.planner_app.ui.theme.SuccessContainer
+import com.example.planner_app.ui.theme.onSuccess
+import com.example.planner_app.ui.theme.onSuccessVariant
+import com.example.planner_app.ui.theme.success
+import com.example.planner_app.ui.theme.successVariant
 
 @Composable
 fun HomeScreen(
@@ -237,43 +243,44 @@ fun TaskItem(
 @Composable
 fun rememberColorGroup(status: TaskStatus): TaskColors {
     val scheme = MaterialTheme.colorScheme
-    return when(status) {
-        TaskStatus.IN_PROGRESS -> {
-            TaskColors(
-                container = scheme.primaryContainer,
-                onContainer = scheme.onPrimaryContainer,
-                pin = scheme.secondary,
-                onPin = scheme.onSecondary,
-                done = scheme.primary,
-                onDone = scheme.onPrimary,
-                cancel = scheme.tertiary,
-                onCancel = scheme.onTertiary
-            )
-        }
-        /* TODO put the colors into material theme */
-        TaskStatus.COMPLETED -> {
-            TaskColors(
-                container = SuccessContainer,
-                onContainer = OnSuccessContainer,
-                pin = Success,
-                onPin = OnSuccess,
-                done = null,
-                onDone = null,
-                cancel = null,
-                onCancel = null
-            )
-        }
-        TaskStatus.CANCELLED -> {
-            TaskColors(
-                container = scheme.errorContainer,
-                onContainer = scheme.onErrorContainer,
-                pin = scheme.error,
-                onPin = scheme.onError,
-                done = null,
-                onDone = null,
-                cancel = null,
-                onCancel = null
-            )
+    return rememberSaveable {
+        when(status) {
+            TaskStatus.IN_PROGRESS -> {
+                TaskColors(
+                    container = scheme.primaryContainer,
+                    onContainer = scheme.onPrimaryContainer,
+                    pin = scheme.secondary,
+                    onPin = scheme.onSecondary,
+                    done = scheme.primary,
+                    onDone = scheme.onPrimary,
+                    cancel = scheme.tertiary,
+                    onCancel = scheme.onTertiary
+                )
+            }
+            TaskStatus.COMPLETED -> {
+                TaskColors(
+                    container = scheme.successVariant,
+                    onContainer = scheme.onSuccessVariant,
+                    pin = scheme.success,
+                    onPin = scheme.onSuccess,
+                    done = null,
+                    onDone = null,
+                    cancel = null,
+                    onCancel = null
+                )
+            }
+            TaskStatus.CANCELLED -> {
+                TaskColors(
+                    container = scheme.errorContainer,
+                    onContainer = scheme.onErrorContainer,
+                    pin = scheme.error,
+                    onPin = scheme.onError,
+                    done = null,
+                    onDone = null,
+                    cancel = null,
+                    onCancel = null
+                )
+            }
         }
     }
 }

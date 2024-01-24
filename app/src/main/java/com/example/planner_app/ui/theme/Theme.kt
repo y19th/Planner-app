@@ -1,8 +1,6 @@
 package com.example.planner_app.ui.theme
 
 import android.app.Activity
-import android.util.Log
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.PaddingValues
@@ -10,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -20,8 +19,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.structuralEqualityPolicy
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -78,7 +79,15 @@ fun MainTheme(
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }*/
 
-        darkTheme -> DarkColorScheme
+        darkTheme -> {
+            /*TODO dark colors of success*/
+            DarkColorScheme.apply {
+                success = Success
+                onSuccess = onSuccess
+                successVariant = SuccessContainer
+                onSuccessVariant = OnSuccessContainer
+            }
+        }
         else -> LightColorScheme
     }
     val view = LocalView.current
@@ -91,7 +100,6 @@ fun MainTheme(
     }
 
     val navController = rememberNavController()
-
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography
@@ -116,7 +124,7 @@ fun MainBottomBar(
 ) {
     /*TODO fix the problem with contentColor, selectedColor and background color*/
 
-    val bottomBarColors = rememberBottomBarColors()
+    val barColors = rememberBottomBarColors()
 
     BottomNavigation(
         modifier = Modifier
@@ -158,14 +166,14 @@ fun MainBottomBar(
                     Icon(
                         imageVector = destination.icon,
                         contentDescription = null,
-                        tint = if(isSelected) bottomBarColors.selectedContent else bottomBarColors.content
+                        tint = if (isSelected) barColors.selectedContent else barColors.content
                     )
                 },
                 label = {
                     Text(
                         text = stringResource(id = destination.label),
                         style = MaterialTheme.typography.labelSmall,
-                        color = if(isSelected) bottomBarColors.selectedContent else bottomBarColors.content
+                        color = if(isSelected) barColors.selectedContent else barColors.content
                     )
                 }
             )
@@ -177,7 +185,7 @@ fun MainBottomBar(
 @Composable
 fun rememberBottomBarColors(): BottomBarColors {
     with(MaterialTheme.colorScheme) {
-        return remember {
+        return rememberSaveable {
             BottomBarColors(
                 background = surfaceVariant,
                 content = onSurfaceVariant,
@@ -187,6 +195,7 @@ fun rememberBottomBarColors(): BottomBarColors {
     }
 }
 
+@Stable
 data class BottomBarColors(
     val background: Color,
     val content: Color,
@@ -204,3 +213,35 @@ fun rememberBottomBarDestinations(): List<Destinations> {
         )
     }
 }
+
+var successColorScheme by mutableStateOf(Success, structuralEqualityPolicy())
+    private set
+var onSuccessColorScheme by mutableStateOf(OnSuccess, structuralEqualityPolicy())
+    private set
+var successVariantColorScheme by mutableStateOf(SuccessContainer, structuralEqualityPolicy())
+    private set
+var onSuccessVariantColorScheme by mutableStateOf(OnSuccessContainer, structuralEqualityPolicy())
+    private set
+
+var ColorScheme.success: Color
+    get() = successColorScheme
+    private set(value) {
+        successColorScheme = value
+    }
+var ColorScheme.onSuccess: Color
+    get() = onSuccessColorScheme
+    private set(value) {
+        onSuccessColorScheme = value
+    }
+var ColorScheme.successVariant: Color
+    get() = successVariantColorScheme
+    private set(value) {
+        successVariantColorScheme = value
+    }
+
+var ColorScheme.onSuccessVariant: Color
+    get() = onSuccessVariantColorScheme
+    private set(value) {
+        onSuccessVariantColorScheme = value
+    }
+
