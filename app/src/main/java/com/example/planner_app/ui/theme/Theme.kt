@@ -74,6 +74,9 @@ fun MainTheme(
     dynamicColor: Boolean = true,
     content: @Composable (PaddingValues, NavHostController) -> Unit
 ) {
+
+    val navController = rememberNavController()
+
     val colorScheme = when {
        /* dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
@@ -100,7 +103,6 @@ fun MainTheme(
         }
     }
 
-    val navController = rememberNavController()
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography
@@ -124,7 +126,6 @@ fun MainBottomBar(
     navController: NavController
 ) {
     /*TODO fix the problem with contentColor, selectedColor and background color*/
-
     val barColors = rememberBottomBarColors()
 
     BottomNavigation(
@@ -145,7 +146,6 @@ fun MainBottomBar(
         val navBackStackEntry by navController.currentBackStackEntryAsState()
 
         destinations.forEach { destination ->
-
             val isSelected = navBackStackEntry?.destination?.hierarchy?.any {
                 it.route == destination.route.name
             } == true
@@ -157,9 +157,7 @@ fun MainBottomBar(
                         popUpTo(navController.graph.findStartDestination().id) {
                             saveState = true
                         }
-
                         launchSingleTop = true
-
                         restoreState = true
                     }
                 },
