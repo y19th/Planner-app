@@ -135,9 +135,10 @@ fun MainBottomBar(
                 shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp),
                 color = MaterialTheme.colorScheme.outline
             )
-            .clip(
+            /*TODO mind how to do a normal bottom bar*/
+            /*.clip(
                 shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp)
-            )
+            )*/
         ,
         backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
         elevation = 4.dp

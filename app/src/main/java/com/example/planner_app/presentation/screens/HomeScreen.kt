@@ -22,9 +22,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -34,16 +35,13 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.planner_app.R
 import com.example.planner_app.domain.models.TaskColors
+import com.example.planner_app.domain.models.TaskModel
 import com.example.planner_app.domain.models.TaskPin
 import com.example.planner_app.domain.models.TaskStatus
 import com.example.planner_app.presentation.components.Divider
 import com.example.planner_app.presentation.components.HorizontalSpacer
 import com.example.planner_app.presentation.components.Pin
 import com.example.planner_app.presentation.components.VerticalSpacer
-import com.example.planner_app.ui.theme.OnSuccess
-import com.example.planner_app.ui.theme.OnSuccessContainer
-import com.example.planner_app.ui.theme.Success
-import com.example.planner_app.ui.theme.SuccessContainer
 import com.example.planner_app.ui.theme.onSuccess
 import com.example.planner_app.ui.theme.onSuccessVariant
 import com.example.planner_app.ui.theme.success
@@ -54,6 +52,15 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     navController: NavController
 ) {
+    val model = TaskModel(
+        title = "Cooking and Cleaning",
+        content = "wash the dishes and cook the dinner. after that pet the cat and feed oleg",
+        status = TaskStatus.IN_PROGRESS,
+        taskPin = listOf(TaskPin(name = "important"), TaskPin(name = "home based")),
+    )
+
+
+
     Column(
         modifier = modifier.fillMaxSize()
     ) {
@@ -79,7 +86,7 @@ fun HomeScreen(
                     color = MaterialTheme.colorScheme.surfaceVariant,
                     shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp)
                 )
-                .padding(vertical = 16.dp, horizontal = 12.dp)
+                .padding(start = 12.dp, end = 12.dp, top = 16.dp)
         ) {
             Row (
                 modifier = Modifier.fillMaxWidth()
@@ -99,10 +106,9 @@ fun HomeScreen(
             ) {
                 items(5){
                     TaskItem(
-                        taskTitle = "Cooking and Cleaning",
-                        taskPins = listOf(TaskPin(name = "important"), TaskPin(name = "home based")),
-                        taskContent = "wash the dishes and cook the dinner. after that pet the cat and feed oleg",
-                        status = TaskStatus.IN_PROGRESS
+                        model = model,
+                        onDoneClick = {
+                        }
                     )
                 }
             }
@@ -114,14 +120,16 @@ fun HomeScreen(
 @Composable
 fun TaskItem(
     modifier: Modifier = Modifier,
-    taskTitle: String = "Custom Title",
-    taskContent: String = "this is task",
-    taskPins: List<TaskPin> = listOf(TaskPin(), TaskPin()),
+    model: TaskModel = TaskModel(),
     taskDeadLine: String = "32 mins",
+    onDoneClick: () -> Unit,
     status: TaskStatus = TaskStatus.IN_PROGRESS
 ) {
+    var remStatus by remember {
+        mutableStateOf(status)
+    }
     /*TODO some remember if needed*/
-    val colorGroup = rememberColorGroup(status = status)
+    val colorGroup = receiveColorGroup(status = remStatus)
 
     Column(
         modifier = modifier
@@ -158,7 +166,7 @@ fun TaskItem(
                 verticalArrangement = Arrangement.Center
             ){
                 Text(
-                    text = taskTitle,
+                    text = model.title,
                     style = MaterialTheme.typography.titleMedium,
                     color = colorGroup.onContainer
                 )
@@ -181,9 +189,9 @@ fun TaskItem(
         FlowRow(
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            repeat(taskPins.size) { index ->
+            repeat(model.taskPin.size) { index ->
                 Pin(
-                    pinTitle = taskPins[index].name,
+                    pinTitle = model.taskPin[index].name,
                     backgroundColor = colorGroup.pin,
                     textColor = colorGroup.onPin
                 )
@@ -193,7 +201,7 @@ fun TaskItem(
         VerticalSpacer(height = 10.dp)
 
         Text(
-            text = taskContent,
+            text = model.content,
             style = MaterialTheme.typography.bodyMedium,
             color = colorGroup.onContainer
         )
@@ -211,7 +219,9 @@ fun TaskItem(
                     colors = ButtonDefaults.buttonColors(
                         containerColor = colorGroup.done ?: MaterialTheme.colorScheme.primary
                     ),
-                    onClick = { /*TODO*/ }
+                    onClick = {
+                        remStatus = TaskStatus.COMPLETED
+                    }
                 ) {
                     Text(
                         text = stringResource(id = R.string.button_done),
@@ -242,10 +252,9 @@ fun TaskItem(
 }
 /*TODO make taskColors saveable*/
 @Composable
-fun rememberColorGroup(status: TaskStatus): TaskColors {
+fun receiveColorGroup(status: TaskStatus): TaskColors {
     val scheme = MaterialTheme.colorScheme
-    return remember {
-        when(status) {
+    return when(status) {
             TaskStatus.IN_PROGRESS -> {
                 TaskColors(
                     container = scheme.primaryContainer,
@@ -282,7 +291,6 @@ fun rememberColorGroup(status: TaskStatus): TaskColors {
                     onCancel = null
                 )
             }
-        }
     }
 }
 
