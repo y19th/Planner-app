@@ -7,6 +7,7 @@ import androidx.compose.runtime.Immutable
 
 @Immutable
 data class TaskModel(
+    val id: Int = -1,
     val title: String = "title",
     val content: String = "content",
     val dateFrom: String = "from date",

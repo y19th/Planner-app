@@ -53,7 +53,8 @@ fun SettingsScreen() {
             text = stringResource(id = R.string.setting_screen),
             style = MaterialTheme.typography.displaySmall,
             color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
+            modifier = Modifier
+                .padding(top = 16.dp, bottom = 8.dp)
         )
 
         Column(

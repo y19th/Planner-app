@@ -10,7 +10,7 @@ import com.example.planner_app.room.converters.PinList
 
 @Entity(tableName = "task")
 data class TaskEntity(
-    @PrimaryKey(autoGenerate = true) val id: Int,
+    @PrimaryKey(autoGenerate = true) val id: Int ,
     @ColumnInfo(name = "title") val title: String = "title",
     @ColumnInfo(name = "content") val content: String = "content",
     @ColumnInfo(name = "date_from") val dateFrom: String = "from date",
@@ -19,6 +19,10 @@ data class TaskEntity(
     @ColumnInfo(name = "pins") val taskPin: PinList = PinList()
 ) {
     fun toTaskModel() = TaskModel(
-        title, content, dateFrom, dateTo, status, taskPin.list
+        id, title, content, dateFrom, dateTo, status, taskPin.list
     )
+}
+
+fun List<TaskEntity>.toListTaskModel(): List<TaskModel> {
+    return this.map { entity -> entity.toTaskModel() }
 }

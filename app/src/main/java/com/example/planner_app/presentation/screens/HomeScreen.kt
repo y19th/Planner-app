@@ -1,7 +1,6 @@
 package com.example.planner_app.presentation.screens
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -23,23 +22,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.planner_app.R
+import com.example.planner_app.domain.events.MainEvent
 import com.example.planner_app.domain.models.TaskColors
 import com.example.planner_app.domain.models.TaskModel
-import com.example.planner_app.domain.models.TaskPin
 import com.example.planner_app.domain.models.TaskStatus
 import com.example.planner_app.presentation.components.Divider
 import com.example.planner_app.presentation.components.HorizontalSpacer
@@ -58,13 +52,6 @@ fun HomeScreen(
 ) {
 
     val state = viewModel.state.collectAsState().value
-
-    val model = TaskModel(
-        title = state.isLoading.toString(),
-        content = "wash the dishes and cook the dinner. after that pet the cat and feed oleg",
-        status = TaskStatus.IN_PROGRESS,
-        taskPin = listOf(TaskPin(name = "important"), TaskPin(name = "home based")),
-    )
 
     Column(
         modifier = modifier.fillMaxSize()
@@ -97,7 +84,7 @@ fun HomeScreen(
                 modifier = Modifier.fillMaxWidth()
             ){
                 Text(
-                    text = stringResource(id = R.string.tasks_for_today,2 /*TODO*/),
+                    text = stringResource(id = R.string.tasks_for_today,state.taskList.size),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -109,10 +96,11 @@ fun HomeScreen(
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                items(5){
+                items(state.taskList.size){
                     TaskItem(
-                        model = model,
+                        model = state.taskList[it],
                         onDoneClick = {
+                            viewModel.onEvent(MainEvent.OnTaskDone(taskId = state.taskList[it].id))
                         }
                     )
                 }
@@ -127,13 +115,9 @@ fun TaskItem(
     modifier: Modifier = Modifier,
     model: TaskModel = TaskModel(),
     taskDeadLine: String = "32 mins",
-    onDoneClick: () -> Unit,
-    status: TaskStatus = TaskStatus.IN_PROGRESS
+    onDoneClick: () -> Unit
 ) {
-    var remStatus by remember {
-        mutableStateOf(status)
-    }
-    val colorGroup = rememberColorGroup(status = remStatus)
+    val colorGroup = rememberColorGroup(status = model.status)
 
     Column(
         modifier = modifier
@@ -174,7 +158,7 @@ fun TaskItem(
                     style = MaterialTheme.typography.titleMedium,
                     color = colorGroup.onContainer
                 )
-                if(status == TaskStatus.IN_PROGRESS) {
+                if(model.status == TaskStatus.IN_PROGRESS) {
                     Text(
                         text = stringResource(id = R.string.deadline_pattern, taskDeadLine),
                         style = MaterialTheme.typography.labelSmall,
@@ -210,7 +194,7 @@ fun TaskItem(
             color = colorGroup.onContainer
         )
 
-        if(status == TaskStatus.IN_PROGRESS) {
+        if(model.status == TaskStatus.IN_PROGRESS) {
 
             VerticalSpacer(height = 32.dp)
 
@@ -223,9 +207,7 @@ fun TaskItem(
                     colors = ButtonDefaults.buttonColors(
                         containerColor = colorGroup.done ?: MaterialTheme.colorScheme.primary
                     ),
-                    onClick = {
-                        remStatus = TaskStatus.COMPLETED
-                    }
+                    onClick = onDoneClick
                 ) {
                     Text(
                         text = stringResource(id = R.string.button_done),

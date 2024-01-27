@@ -1,9 +1,23 @@
 package com.example.planner_app.navigation
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.core.EaseIn
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideIn
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.navigation.NavHostController
@@ -55,6 +69,42 @@ fun NavHostContainer(
                     )
                 )
             }
+        },
+        enterTransition = {
+            fadeIn(
+                animationSpec = tween(AnimationDuration.Short, easing = LinearEasing)
+            ) + slideIntoContainer(
+                towards = AnimatedContentTransitionScope.SlideDirection.Up,
+                animationSpec = tween(durationMillis = AnimationDuration.Medium, easing = EaseIn),
+                initialOffset = { height ->
+                    height / 8
+                }
+            )
+        },
+        exitTransition = {
+            fadeOut(animationSpec = tween(durationMillis = AnimationDuration.Fast, easing = LinearEasing))
         }
     )
+}
+
+@Stable
+object AnimationDuration {
+
+    @Stable
+    val Fast = 100
+
+    @Stable
+    val Short = 200
+
+    @Stable
+    val LessMedium = 300
+
+    @Stable
+    val Medium = 400
+
+    @Stable
+    val LessLong = 500
+
+    @Stable
+    val Long = 600
 }
