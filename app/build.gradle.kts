@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-parcelize")
     id("com.google.devtools.ksp")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -61,6 +62,8 @@ dependencies {
     val composeBomVersion = "2023.10.01"
     val navigationVersion = "2.7.6"
     val room_version = "2.6.1"
+    val dagger_version = "2.48"
+    val hilt_verison = "2.48"
 
     implementation("androidx.navigation:navigation-compose:$navigationVersion")
 
@@ -72,6 +75,17 @@ dependencies {
 
     //gson
     implementation("com.google.code.gson:gson:2.10.1")
+
+    //dagger
+    implementation("com.google.dagger:dagger:$dagger_version")
+    implementation ("com.google.dagger:dagger-android-support:$dagger_version")
+    //annotationProcessor ("com.google.dagger:dagger-android-processor:$dagger_version")
+    ksp("com.google.dagger:dagger-compiler:$dagger_version")
+    //hilt
+    implementation ("com.google.dagger:hilt-android:$hilt_verison")
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
+    //annotationProcessor ("com.google.dagger:hilt-compiler:$hilt_verison")
+    ksp ("com.google.dagger:hilt-compiler:$hilt_verison")
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.core:core-splashscreen:1.0.1")

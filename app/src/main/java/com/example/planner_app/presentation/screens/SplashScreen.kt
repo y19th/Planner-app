@@ -8,22 +8,26 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavDirections
 import androidx.navigation.compose.rememberNavController
 import com.example.planner_app.R
 import com.example.planner_app.navigation.models.Routes
-import kotlinx.coroutines.delay
+import com.example.planner_app.presentation.viewmodels.MainViewModel
 
 @Composable
 fun SplashScreen(
-    navController: NavController = rememberNavController()
+    navController: NavController = rememberNavController(),
+    mainViewModel: MainViewModel = hiltViewModel()
 ) {
+    val isLoading = mainViewModel.state.collectAsState().value.isLoading
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -38,9 +42,8 @@ fun SplashScreen(
             style = MaterialTheme.typography.displayMedium,
             color = MaterialTheme.colorScheme.onSurface
         )
-        LaunchedEffect(null) {
-            delay(1000L)
-            navController.navigate(route = Routes.HOME.name)
+        LaunchedEffect(isLoading) {
+            if(!isLoading)navController.navigate(route = Routes.HOME.name)
         }
     }
 }

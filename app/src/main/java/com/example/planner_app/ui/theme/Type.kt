@@ -37,6 +37,13 @@ val Typography = Typography(
     ),
     displayMedium = TextStyle(
         fontFamily = MainFontFamily,
+        fontStyle = FontStyle.Italic,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 40.sp,
+        letterSpacing = 2.sp
+    ),
+    displaySmall = TextStyle(
+        fontFamily = MainFontFamily,
         fontWeight = FontWeight.Medium,
         fontSize = 24.sp,
         letterSpacing = 0.96.sp

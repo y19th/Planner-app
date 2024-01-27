@@ -22,17 +22,20 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.compose.ui.zIndex
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.planner_app.R
 import com.example.planner_app.domain.models.TaskColors
 import com.example.planner_app.domain.models.TaskModel
@@ -42,6 +45,7 @@ import com.example.planner_app.presentation.components.Divider
 import com.example.planner_app.presentation.components.HorizontalSpacer
 import com.example.planner_app.presentation.components.Pin
 import com.example.planner_app.presentation.components.VerticalSpacer
+import com.example.planner_app.presentation.viewmodels.MainViewModel
 import com.example.planner_app.ui.theme.onSuccess
 import com.example.planner_app.ui.theme.onSuccessVariant
 import com.example.planner_app.ui.theme.success
@@ -50,16 +54,17 @@ import com.example.planner_app.ui.theme.successVariant
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    navController: NavController
+    viewModel: MainViewModel = hiltViewModel()
 ) {
+
+    val state = viewModel.state.collectAsState().value
+
     val model = TaskModel(
-        title = "Cooking and Cleaning",
+        title = state.isLoading.toString(),
         content = "wash the dishes and cook the dinner. after that pet the cat and feed oleg",
         status = TaskStatus.IN_PROGRESS,
         taskPin = listOf(TaskPin(name = "important"), TaskPin(name = "home based")),
     )
-
-
 
     Column(
         modifier = modifier.fillMaxSize()
@@ -128,8 +133,7 @@ fun TaskItem(
     var remStatus by remember {
         mutableStateOf(status)
     }
-    /*TODO some remember if needed*/
-    val colorGroup = receiveColorGroup(status = remStatus)
+    val colorGroup = rememberColorGroup(status = remStatus)
 
     Column(
         modifier = modifier
@@ -138,11 +142,11 @@ fun TaskItem(
                 color = colorGroup.container,
                 shape = RoundedCornerShape(16.dp)
             )
-            .border(
+            /*.border(
                 width = 0.25.dp,
                 color = MaterialTheme.colorScheme.outline,
                 shape = RoundedCornerShape(16.dp)
-            )
+            )*/
             .padding(horizontal = 10.dp, vertical = 10.dp)
     ) {
         Row(
@@ -252,9 +256,10 @@ fun TaskItem(
 }
 /*TODO make taskColors saveable*/
 @Composable
-fun receiveColorGroup(status: TaskStatus): TaskColors {
+fun rememberColorGroup(status: TaskStatus): TaskColors {
     val scheme = MaterialTheme.colorScheme
-    return when(status) {
+    return remember(key1 = status) {
+        when (status) {
             TaskStatus.IN_PROGRESS -> {
                 TaskColors(
                     container = scheme.primaryContainer,
@@ -267,6 +272,7 @@ fun receiveColorGroup(status: TaskStatus): TaskColors {
                     onCancel = scheme.onTertiary
                 )
             }
+
             TaskStatus.COMPLETED -> {
                 TaskColors(
                     container = scheme.successVariant,
@@ -279,6 +285,7 @@ fun receiveColorGroup(status: TaskStatus): TaskColors {
                     onCancel = null
                 )
             }
+
             TaskStatus.CANCELLED -> {
                 TaskColors(
                     container = scheme.errorContainer,
@@ -291,6 +298,7 @@ fun receiveColorGroup(status: TaskStatus): TaskColors {
                     onCancel = null
                 )
             }
+        }
     }
 }
 
