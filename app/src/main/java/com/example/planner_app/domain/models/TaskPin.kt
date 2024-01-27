@@ -6,6 +6,5 @@ import androidx.compose.ui.graphics.Color
 @Immutable
 data class TaskPin(
     /*TODO remove color and add importance(or something like that)*/
-    val name: String = "pin",
-    val color: Color = Color.Cyan
+    val name: String = "pin"
 )

@@ -11,6 +11,7 @@ import com.example.planner_app.navigation.models.Routes
 import com.example.planner_app.presentation.screens.AddScreen
 import com.example.planner_app.presentation.screens.HomeScreen
 import com.example.planner_app.presentation.screens.SettingsScreen
+import com.example.planner_app.presentation.screens.SplashScreen
 
 @Composable
 fun NavHostContainer(
@@ -19,7 +20,7 @@ fun NavHostContainer(
 ) {
     NavHost(
         navController = navHostController,
-        startDestination = Routes.HOME.name,
+        startDestination = Routes.SPLASH.name,
         modifier = Modifier.padding(paddingValues = paddingValues),
         builder = {
             composable(Routes.HOME.name) {
@@ -30,6 +31,9 @@ fun NavHostContainer(
             }
             composable(Routes.SETTINGS.name) {
                 SettingsScreen()
+            }
+            composable(Routes.SPLASH.name) {
+                SplashScreen(navHostController)
             }
         }
     )

@@ -39,6 +39,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.planner_app.navigation.models.Destinations
+import com.example.planner_app.navigation.models.Routes
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
@@ -120,6 +121,21 @@ fun MainTheme(
     }
 }
 
+@Composable
+fun BottomBarTheme(
+    navController: NavController,
+    content: @Composable (PaddingValues) -> Unit
+) {
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        containerColor = MaterialTheme.colorScheme.surface,
+        bottomBar = { MainBottomBar(navController = navController)},
+        content = { paddingValues ->
+            content.invoke(paddingValues)
+        }
+    )
+}
+
 
 @Composable
 fun MainBottomBar(
@@ -127,56 +143,60 @@ fun MainBottomBar(
 ) {
     /*TODO fix the problem with contentColor, selectedColor and background color*/
     val barColors = rememberBottomBarColors()
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val destinationHierarchy = navBackStackEntry?.destination?.hierarchy
 
-    BottomNavigation(
-        modifier = Modifier
-            .border(
-                width = 0.5.dp,
-                shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp),
-                color = MaterialTheme.colorScheme.outline
-            )
+    if (destinationHierarchy?.any {
+        it.route == Routes.SPLASH.name
+        } != true) {
+        BottomNavigation(
+            modifier = Modifier
+                .border(
+                    width = 0.5.dp,
+                    shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp),
+                    color = MaterialTheme.colorScheme.outline
+                )
             /*TODO mind how to do a normal bottom bar*/
             /*.clip(
                 shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp)
-            )*/
-        ,
-        backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
-        elevation = 4.dp
-    ) {
-        val destinations = rememberBottomBarDestinations()
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
+            )*/,
+            backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
+            elevation = 4.dp
+        ) {
+            val destinations = rememberBottomBarDestinations()
 
-        destinations.forEach { destination ->
-            val isSelected = navBackStackEntry?.destination?.hierarchy?.any {
-                it.route == destination.route.name
-            } == true
+            destinations.forEach { destination ->
+                val isSelected = destinationHierarchy?.any {
+                    it.route == destination.route.name
+                } == true
 
-            BottomNavigationItem(
-                selected = isSelected,
-                onClick = {
-                    navController.navigate(destination.route.name) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
+                BottomNavigationItem(
+                    selected = isSelected,
+                    onClick = {
+                        navController.navigate(destination.route.name) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
                         }
-                        launchSingleTop = true
-                        restoreState = true
+                    },
+                    icon = {
+                        Icon(
+                            imageVector = destination.icon,
+                            contentDescription = null,
+                            tint = if (isSelected) barColors.selectedContent else barColors.content
+                        )
+                    },
+                    label = {
+                        Text(
+                            text = stringResource(id = destination.label),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = if (isSelected) barColors.selectedContent else barColors.content
+                        )
                     }
-                },
-                icon = {
-                    Icon(
-                        imageVector = destination.icon,
-                        contentDescription = null,
-                        tint = if (isSelected) barColors.selectedContent else barColors.content
-                    )
-                },
-                label = {
-                    Text(
-                        text = stringResource(id = destination.label),
-                        style = MaterialTheme.typography.labelSmall,
-                        color = if(isSelected) barColors.selectedContent else barColors.content
-                    )
-                }
-            )
+                )
+            }
         }
     }
 }

@@ -5,6 +5,7 @@ import com.example.planner_app.domain.events.MainEvent
 import com.example.planner_app.domain.states.MainState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
 class MainViewModel: ViewModel() {
     companion object {
@@ -13,6 +14,11 @@ class MainViewModel: ViewModel() {
 
     private val _state = MutableStateFlow(MainState())
     val state = _state.asStateFlow()
+
+
+    init {
+        _state.update { it.copy(isLoading = true) }
+    }
 
 
     fun onEvent(event: MainEvent) {
