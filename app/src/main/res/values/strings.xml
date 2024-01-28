@@ -24,4 +24,10 @@
     <string name="task_title_text">Task title</string>
     <string name="task_pins_text">Add pins to your task</string>
     <string name="task_date_text">Pick date</string>
+    <string name="task_date_from">from</string>
+    <string name="task_date_to">to</string>
+    <string name="task_emoji_text">Pick emoji(optionally)</string>
+    <string name="task_describe_text">Describe it here</string>
+    <string name="task_describe_placeholder">Text what you want to do</string>
+    <string name="task_add">Add task</string>
 </resources>

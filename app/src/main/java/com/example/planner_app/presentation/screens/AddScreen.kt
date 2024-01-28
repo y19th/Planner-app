@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -55,6 +57,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.VisualTransformation
@@ -98,7 +101,7 @@ fun AddScreen(
                     color = MaterialTheme.colorScheme.surfaceVariant,
                     shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp)
                 )
-                .padding(vertical = 24.dp, horizontal = 20.dp)
+                .padding(vertical = 8.dp, horizontal = 20.dp)
         ) {
             ScreenColumn(
                 title = stringResource(id = R.string.task_title_text),
@@ -110,38 +113,100 @@ fun AddScreen(
                     },
                     placeholder = stringResource(id = R.string.task_title_placeholder)
                 )
-
-                VerticalSpacer(height = 16.dp)
             }
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+            ScreenRow {
                 Text(
                     text = stringResource(id = R.string.task_pins_text),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
+
                 AddButton {
                     /*TODO*/
                 }
             }
 
-            MainDivider()
-
             ScreenColumn(
-                modifier = Modifier.padding(vertical = 16.dp),
                 title = stringResource(id = R.string.task_date_text)
             ) {
-                LinedDatePicker(modifier = Modifier.padding(vertical = 6.dp))
+                LinedDatePicker(
+                    modifier = Modifier.padding(vertical = 6.dp),
+                    title = stringResource(id = R.string.task_date_from),
+                    value = state.value.taskTitle
+                )
+                LinedDatePicker(
+                    modifier = Modifier.padding(vertical = 6.dp),
+                    title = stringResource(id = R.string.task_date_to),
+                    value = state.value.taskTitle
+                )
+            }
+
+            ScreenRow {
+                Text(
+                    text = stringResource(id = R.string.task_emoji_text),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+
+                AddButton {
+                    /*TODO*/
+                }
+            }
+
+            ScreenColumn(
+                title = stringResource(id = R.string.task_describe_text),
+                withDivider = false
+            ) {
+                RoundedTextField(
+                    modifier = Modifier
+                        .heightIn(
+                            min = 128.dp
+                        ),
+                    value = state.value.taskTitle,
+                    placeholder = stringResource(id = R.string.task_describe_placeholder),
+                    onValueChange = {
+                        viewModel.onEvent(AddEvents.OnChangeTaskTitle(it))
+                    },
+                    shape = RoundedCornerShape(16.dp),
+                    singleLine = false
+                )
+            }
+
+            RoundedCoveringButton(
+                onButtonClick = { /*TODO*/ }
+            ) {
+                Text(
+                    text = stringResource(id = R.string.task_add),
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
             }
         }
     }
 }
+
+
+
+@Composable
+fun ScreenRow(
+    modifier: Modifier = Modifier,
+    withDivider: Boolean = true,
+    content: @Composable RowScope.() -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 16.dp)
+            .then(modifier),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        content = content
+    )
+
+    if(withDivider)MainDivider()
+}
+
 
 @Composable
 fun AddButton(
@@ -153,9 +218,9 @@ fun AddButton(
             .wrapContentSize()
             .background(
                 color = MaterialTheme.colorScheme.primary,
-                shape = RoundedCornerShape(2.dp)
+                shape = RoundedCornerShape(4.dp)
             )
-            .clip(RoundedCornerShape(2.dp))
+            .clip(RoundedCornerShape(4.dp))
             .clickable { onClick.invoke() }
             .then(modifier)
     ) {
@@ -178,6 +243,7 @@ private fun ScreenColumn(
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(vertical = 16.dp)
             .then(modifier)
     ) {
         Text(
@@ -190,8 +256,9 @@ private fun ScreenColumn(
 
         content.invoke(this)
 
-        if(withDivider)MainDivider()
     }
+
+    if(withDivider)MainDivider()
 }
 
 
@@ -199,7 +266,8 @@ private fun ScreenColumn(
 @Composable
 fun LinedDatePicker(
     modifier: Modifier = Modifier,
-    title: String = "from"
+    title: String = "from",
+    value: String = ""
 ) {
     Row(
         modifier = Modifier
@@ -210,13 +278,15 @@ fun LinedDatePicker(
         Text(
             text = title,
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.weight(0.1f)
         )
 
-        HorizontalSpacer(width = 24.dp)
+        Spacer(modifier = Modifier.weight(0.05f))
 
         LinedText(
-            text = "asd"
+            modifier = Modifier.weight(0.85f),
+            text = value
         )
     }
 }
@@ -224,6 +294,7 @@ fun LinedDatePicker(
 
 @Composable
 fun LinedText(
+    modifier: Modifier = Modifier,
     text: String = ""
 ) {
     var focused by remember {
@@ -241,9 +312,10 @@ fun LinedText(
 
     Text(
         text = text,
-        style = MaterialTheme.typography.bodySmall,
+        style = MaterialTheme.typography.bodyMedium,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
         modifier = Modifier
+            .wrapContentSize(align = Alignment.CenterStart)
             .widthIn(
                 min = 64.dp
             )
@@ -265,6 +337,7 @@ fun LinedText(
                     alpha = 1.0f
                 )
             }
+            .then(modifier)
     )
 }
 
@@ -275,7 +348,9 @@ fun RoundedTextField(
     modifier: Modifier = Modifier,
     value: String,
     onValueChange: (String) -> Unit,
+    shape: Shape = CircleShape,
     placeholder: String = "",
+    singleLine: Boolean = true,
     isError: Boolean = false
 ) {
     with(MaterialTheme.colorScheme) {
@@ -292,9 +367,9 @@ fun RoundedTextField(
                 value = value,
                 innerTextField = innerTextField,
                 enabled = true,
-                singleLine = true,
+                singleLine = singleLine,
                 isError = isError,
-                shape = CircleShape,
+                shape = shape,
                 contentPadding = PaddingValues(vertical = 12.dp, horizontal = 16.dp),
                 placeholder = {
                     Text(
@@ -328,14 +403,14 @@ fun RoundedTextField(
                             .fillMaxSize()
                             .background(
                                 color = primaryContainer,
-                                shape = CircleShape
+                                shape = shape
                             )
                             .border(
                                 width = 0.25.dp,
                                 color = MaterialTheme.colorScheme.outline,
-                                shape = CircleShape
+                                shape = shape
                             )
-                            .clip(CircleShape)
+                            .clip(shape)
                     )
                 }
             )
