@@ -35,7 +35,7 @@ import com.example.planner_app.domain.events.MainEvent
 import com.example.planner_app.domain.models.TaskColors
 import com.example.planner_app.domain.models.TaskModel
 import com.example.planner_app.domain.models.TaskStatus
-import com.example.planner_app.presentation.components.Divider
+import com.example.planner_app.presentation.components.MainDivider
 import com.example.planner_app.presentation.components.HorizontalSpacer
 import com.example.planner_app.presentation.components.Pin
 import com.example.planner_app.presentation.components.VerticalSpacer
@@ -170,7 +170,7 @@ fun TaskItem(
 
         }
 
-        Divider()
+        MainDivider()
 
         VerticalSpacer(height = 10.dp)
 

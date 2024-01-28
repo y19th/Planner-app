@@ -39,7 +39,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.planner_app.R
-import com.example.planner_app.presentation.components.Divider
+import com.example.planner_app.presentation.components.MainDivider
 import com.example.planner_app.presentation.components.VerticalSpacer
 
 @Composable
@@ -163,7 +163,7 @@ fun SettingsPart(
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
-        Divider(modifier = Modifier.padding(vertical = 2.dp))
+        MainDivider(modifier = Modifier.padding(vertical = 2.dp))
 
         VerticalSpacer(height = 16.dp)
 

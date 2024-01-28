@@ -19,4 +19,9 @@
     <string name="setting_cache_format">%1$.1f Mb</string>
     <string name="setting_cache_clear">Clear cache</string>
     <string name="setting_cache_warning">Warning: clearing cache will delete all plan history</string>
+    <string name="add_task_destinations">Add new task</string>
+    <string name="task_title_placeholder">Type your task title</string>
+    <string name="task_title_text">Task title</string>
+    <string name="task_pins_text">Add pins to your task</string>
+    <string name="task_date_text">Pick date</string>
 </resources>

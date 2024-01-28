@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun Divider(
+fun MainDivider(
     modifier: Modifier = Modifier,
     height: Dp = 0.25.dp,
     color: Color = MaterialTheme.colorScheme.outlineVariant
