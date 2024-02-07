@@ -3,6 +3,7 @@ package com.example.util
 import androidx.compose.runtime.Stable
 
 
+@Suppress("unused")
 @Stable
 object AnimationDuration {
 

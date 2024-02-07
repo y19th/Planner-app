@@ -243,22 +243,25 @@ var successVariantColorScheme by mutableStateOf(SuccessContainer, structuralEqua
 var onSuccessVariantColorScheme by mutableStateOf(OnSuccessContainer, structuralEqualityPolicy())
     private set
 
+@Suppress("UnusedReceiverParameter")
 var ColorScheme.success: Color
     get() = successColorScheme
     private set(value) {
         successColorScheme = value
     }
+@Suppress("UnusedReceiverParameter")
 var ColorScheme.onSuccess: Color
     get() = onSuccessColorScheme
     private set(value) {
         onSuccessColorScheme = value
     }
+@Suppress("UnusedReceiverParameter")
 var ColorScheme.successVariant: Color
     get() = successVariantColorScheme
     private set(value) {
         successVariantColorScheme = value
     }
-
+@Suppress("UnusedReceiverParameter")
 var ColorScheme.onSuccessVariant: Color
     get() = onSuccessVariantColorScheme
     private set(value) {

@@ -16,13 +16,13 @@ class AddViewModel @Inject constructor() : ViewModel() {
         const val TAG = "AddViewModel"
     }
 
-    private val _state = MutableStateFlow(com.example.domain.states.AddState())
+    private val _state = MutableStateFlow(AddState())
     val state = _state.asStateFlow()
 
 
-    fun onEvent(event: com.example.domain.events.AddEvents) {
+    fun onEvent(event: AddEvents) {
         when(event) {
-            is com.example.domain.events.AddEvents.OnChangeTaskTitle -> {
+            is AddEvents.OnChangeTaskTitle -> {
                 _state.update {
                     it.copy(taskTitle = event.newValue)
                 }

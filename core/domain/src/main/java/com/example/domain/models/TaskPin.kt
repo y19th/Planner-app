@@ -1,7 +1,6 @@
 package com.example.domain.models
 
 import androidx.compose.runtime.Immutable
-import androidx.compose.ui.graphics.Color
 import com.example.data.models.TaskPinModel
 
 @Immutable
