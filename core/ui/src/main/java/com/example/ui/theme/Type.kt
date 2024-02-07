@@ -31,13 +31,10 @@ val Typography = Typography(
     displayLarge = TextStyle(
         fontFamily = MainFontFamily,
         fontWeight = FontWeight.SemiBold,
-        fontStyle = FontStyle.Italic,
-        fontSize = 40.sp,
-        letterSpacing = 2.sp
+        fontSize = 20.sp
     ),
     displayMedium = TextStyle(
         fontFamily = MainFontFamily,
-        fontStyle = FontStyle.Italic,
         fontWeight = FontWeight.SemiBold,
         fontSize = 40.sp,
         letterSpacing = 2.sp
@@ -50,7 +47,6 @@ val Typography = Typography(
     ),
     titleLarge = TextStyle(
         fontFamily = MainFontFamily,
-        fontStyle = FontStyle.Italic,
         fontWeight = FontWeight.Medium,
         fontSize = 28.sp,
         letterSpacing = 0.48.sp

@@ -5,12 +5,11 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.darkColorScheme
@@ -19,11 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.structuralEqualityPolicy
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -32,13 +27,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.navigation.NavController
-import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.domain.models.nav.Destinations
 import com.example.domain.models.nav.Routes
+import com.example.util.extension.contains
+import com.example.util.extension.onSuccess
+import com.example.util.extension.onSuccessVariant
+import com.example.util.extension.success
+import com.example.util.extension.successVariant
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
@@ -47,6 +46,9 @@ private val DarkColorScheme = darkColorScheme(
 )
 
 private val LightColorScheme = lightColorScheme(
+
+    background = Background,
+
     surface = Surface,
     onSurface = OnSurface,
     surfaceVariant = SurfaceContainer,
@@ -92,7 +94,12 @@ fun MainTheme(
                 onSuccessVariant = OnSuccessContainer
             }
         }
-        else -> LightColorScheme
+        else -> LightColorScheme.apply {
+            success = Success
+            onSuccess = onSuccess
+            successVariant = SuccessContainer
+            onSuccessVariant = OnSuccessContainer
+        }
     }
     val view = LocalView.current
     if (!view.isInEditMode) {
@@ -109,7 +116,7 @@ fun MainTheme(
     ) {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
-            containerColor = MaterialTheme.colorScheme.surface,
+            containerColor = MaterialTheme.colorScheme.background,
             bottomBar = {
                 MainBottomBar(navController = navController)
             },
@@ -140,36 +147,24 @@ fun BottomBarTheme(
 fun MainBottomBar(
     navController: NavController
 ) {
-    /*TODO fix the problem with contentColor, selectedColor and background color*/
-    val barColors = rememberBottomBarColors()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val destinationHierarchy = navBackStackEntry?.destination?.hierarchy
+    val navDestination = navBackStackEntry?.destination
 
-    if (destinationHierarchy?.any {
-        it.route == Routes.SPLASH.name
-        } != true) {
-        BottomNavigation(
+    if(navDestination?.contains(Routes.SPLASH.name) != true) {
+        NavigationBar(
             modifier = Modifier
                 .border(
                     width = 0.5.dp,
-                    shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp),
-                    color = MaterialTheme.colorScheme.outline
-                )
-            /*TODO mind how to do a normal bottom bar*/
-            /*.clip(
-                shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp)
-            )*/,
-            backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
-            elevation = 4.dp
+                    color = MaterialTheme.colorScheme.outlineVariant
+                ),
+            containerColor = Color.Transparent
         ) {
             val destinations = rememberBottomBarDestinations()
 
             destinations.forEach { destination ->
-                val isSelected = destinationHierarchy?.any {
-                    it.route == destination.route.name
-                } == true
+                val isSelected = navDestination?.contains(destination.route.name) == true
 
-                BottomNavigationItem(
+                NavigationBarItem(
                     selected = isSelected,
                     onClick = {
                         navController.navigate(destination.route.name) {
@@ -183,44 +178,27 @@ fun MainBottomBar(
                     icon = {
                         Icon(
                             imageVector = destination.icon,
-                            contentDescription = null,
-                            tint = if (isSelected) barColors.selectedContent else barColors.content
+                            contentDescription = null
                         )
                     },
                     label = {
                         Text(
                             text = stringResource(id = destination.label),
-                            style = MaterialTheme.typography.labelSmall,
-                            color = if (isSelected) barColors.selectedContent else barColors.content
+                            style = MaterialTheme.typography.labelSmall
                         )
-                    }
+                    },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = MaterialTheme.colorScheme.primary,
+                        unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        selectedTextColor = MaterialTheme.colorScheme.primary,
+                        unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        indicatorColor = MaterialTheme.colorScheme.surface
+                    )
                 )
             }
         }
     }
 }
-
-/*TODO make saveable*/
-@Stable
-@Composable
-fun rememberBottomBarColors(): BottomBarColors {
-    with(MaterialTheme.colorScheme) {
-        return remember {
-            BottomBarColors(
-                background = surfaceVariant,
-                content = onSurfaceVariant,
-                selectedContent = primary
-            )
-        }
-    }
-}
-
-@Stable
-data class BottomBarColors(
-    val background: Color,
-    val content: Color,
-    val selectedContent: Color
-)
 
 @Stable
 @Composable
@@ -233,38 +211,4 @@ fun rememberBottomBarDestinations(): List<Destinations> {
         )
     }
 }
-
-var successColorScheme by mutableStateOf(Success, structuralEqualityPolicy())
-    private set
-var onSuccessColorScheme by mutableStateOf(OnSuccess, structuralEqualityPolicy())
-    private set
-var successVariantColorScheme by mutableStateOf(SuccessContainer, structuralEqualityPolicy())
-    private set
-var onSuccessVariantColorScheme by mutableStateOf(OnSuccessContainer, structuralEqualityPolicy())
-    private set
-
-@Suppress("UnusedReceiverParameter")
-var ColorScheme.success: Color
-    get() = successColorScheme
-    private set(value) {
-        successColorScheme = value
-    }
-@Suppress("UnusedReceiverParameter")
-var ColorScheme.onSuccess: Color
-    get() = onSuccessColorScheme
-    private set(value) {
-        onSuccessColorScheme = value
-    }
-@Suppress("UnusedReceiverParameter")
-var ColorScheme.successVariant: Color
-    get() = successVariantColorScheme
-    private set(value) {
-        successVariantColorScheme = value
-    }
-@Suppress("UnusedReceiverParameter")
-var ColorScheme.onSuccessVariant: Color
-    get() = onSuccessVariantColorScheme
-    private set(value) {
-        onSuccessVariantColorScheme = value
-    }
 

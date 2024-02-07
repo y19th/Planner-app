@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 fun RoundedCoveringButton(
     modifier: Modifier = Modifier,
     onButtonClick: () -> Unit,
+    shape: RoundedCornerShape = RoundedCornerShape(15.dp),
     content: @Composable (RowScope) -> Unit
 ) {
     Button(
@@ -26,7 +27,7 @@ fun RoundedCoveringButton(
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.onPrimary
         ),
-        shape = RoundedCornerShape(15.dp),
+        shape = shape,
         onClick = onButtonClick,
         content = content
     )

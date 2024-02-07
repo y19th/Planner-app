@@ -7,9 +7,10 @@ val PurpleGrey80 = Color(0xFFCCC2DC)
 val Pink80 = Color(0xFFEFB8C8)
 
 
+val Background = Color(0xFFFFFFFF)
 
-val Surface = Color(0xFF020035)
-val OnSurface = Color(0xFFFCFCFC)
+val Surface = Color(0xFFFFFFFF)
+val OnSurface = Color(0xFF1F1F1F)
 val SurfaceContainer = Color(0xFFFCFCFC)
 val OnSurfaceContainer = Color(0xFF313131)
 

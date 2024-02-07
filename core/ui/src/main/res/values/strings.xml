@@ -27,4 +27,13 @@
     <string name="task_describe_text">Describe it here</string>
     <string name="task_describe_placeholder">Text what you want to do</string>
     <string name="task_add">Add task</string>
+
+
+
+    <string name="filter_importance">По важности</string>
+    <string name="filters">Фильтры</string>
+    <string name="status_task">статус: </string>
+    <string name="deadline">осталось: </string>
+    <string name="done">Сделано</string>
+    <string name="daily_planner">Задачи на день</string>
 </resources>

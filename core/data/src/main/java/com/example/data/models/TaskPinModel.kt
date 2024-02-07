@@ -1,9 +1,12 @@
 package com.example.data.models
 
 import androidx.compose.runtime.Immutable
+import androidx.compose.ui.graphics.Color
 
 @Immutable
 data class TaskPinModel(
-    /*TODO remove color and add importance(or something like that)*/
-    val name: String = "pin"
+    val name: String = "pin",
+    val containerColor: Color = Color.Transparent,
+    val textColor: Color = Color.Black
+
 )
