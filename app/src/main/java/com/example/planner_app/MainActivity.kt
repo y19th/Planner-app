@@ -3,8 +3,7 @@ package com.example.planner_app
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.example.planner_app.navigation.NavHostContainer
-import com.example.planner_app.ui.theme.MainTheme
+import com.example.ui.theme.MainTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

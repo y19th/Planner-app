@@ -61,31 +61,31 @@ dependencies {
 
     val composeBomVersion = "2023.10.01"
     val navigationVersion = "2.7.6"
-    val room_version = "2.6.1"
-    val dagger_version = "2.48"
-    val hilt_verison = "2.48"
+    val daggerVersion = "2.48"
+
+
+
+
+    implementation(project(":core:ui"))
+    implementation(project(":core:components"))
+    implementation(project(":core:domain"))
+    implementation(project(":core:util"))
+
+    implementation(project(":features:home"))
+    implementation(project(":features:add"))
+    implementation(project(":features:settings"))
+    implementation(project(":features:splash"))
 
     implementation("androidx.navigation:navigation-compose:$navigationVersion")
 
-    //room
-    implementation ("androidx.room:room-runtime:$room_version")
-    annotationProcessor("androidx.room:room-compiler:$room_version")
-    implementation ("androidx.room:room-ktx:$room_version")
-    ksp("androidx.room:room-compiler:$room_version")
-
-    //gson
-    implementation("com.google.code.gson:gson:2.10.1")
-
     //dagger
-    implementation("com.google.dagger:dagger:$dagger_version")
-    implementation ("com.google.dagger:dagger-android-support:$dagger_version")
-    //annotationProcessor ("com.google.dagger:dagger-android-processor:$dagger_version")
-    ksp("com.google.dagger:dagger-compiler:$dagger_version")
+    implementation("com.google.dagger:dagger:$daggerVersion")
+    implementation ("com.google.dagger:dagger-android-support:$daggerVersion")
+    ksp("com.google.dagger:dagger-compiler:$daggerVersion")
     //hilt
-    implementation ("com.google.dagger:hilt-android:$hilt_verison")
+    implementation ("com.google.dagger:hilt-android:$daggerVersion")
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
-    //annotationProcessor ("com.google.dagger:hilt-compiler:$hilt_verison")
-    ksp ("com.google.dagger:hilt-compiler:$hilt_verison")
+    ksp ("com.google.dagger:hilt-compiler:$daggerVersion")
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.core:core-splashscreen:1.0.1")

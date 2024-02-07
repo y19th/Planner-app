@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Planner-app</string>
+    <string name="app_title">Daily planner</string>
+    <string name="tasks_for_today">You have %d tasks for today</string>
+    <string name="deadline_pattern">deadline: %s</string>
+    <string name="button_done">Task done</string>
+    <string name="button_cancel">Cancel task</string>
+    <string name="setting_screen">Settings</string>
+    <string name="settings_theme">Customize theme</string>
+    <string name="setting_light_theme">Light theme</string>
+    <string name="setting_dark_theme">Dark theme</string>
+    <string name="setting_system_theme">System theme</string>
+    <string name="setting_title_theme">Theme</string>
+    <string name="settings_caching">Application cache and memory</string>
+    <string name="setting_cache_size">Cache size:</string>
+    <string name="setting_cache_format">%1$.1f Mb</string>
+    <string name="setting_cache_clear">Clear cache</string>
+    <string name="setting_cache_warning">Warning: clearing cache will delete all plan history</string>
+    <string name="add_task_destinations">Add new task</string>
+    <string name="task_title_placeholder">Type your task title</string>
+    <string name="task_title_text">Task title</string>
+    <string name="task_pins_text">Add pins to your task</string>
+    <string name="task_date_text">Pick date</string>
+    <string name="task_date_from">from</string>
+    <string name="task_date_to">to</string>
+    <string name="task_emoji_text">Pick emoji(optionally)</string>
+    <string name="task_describe_text">Describe it here</string>
+    <string name="task_describe_placeholder">Text what you want to do</string>
+    <string name="task_add">Add task</string>
+</resources>
