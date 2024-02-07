@@ -1,10 +1,11 @@
 package com.example.util
 
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 
 
 @Suppress("unused")
-@Stable
+@Immutable
 object AnimationDuration {
 
     @Stable

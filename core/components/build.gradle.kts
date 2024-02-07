@@ -43,6 +43,8 @@ dependencies {
 
     val composeBomVersion = "2023.10.01"
 
+    implementation(project(":core:util"))
+
     implementation("androidx.core:core-ktx:1.12.0")
     implementation(platform("androidx.compose:compose-bom:$composeBomVersion"))
     implementation("androidx.compose.ui:ui")

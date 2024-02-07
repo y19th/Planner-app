@@ -46,7 +46,7 @@ dependencies {
     val daggerVersion = "2.48"
 
     implementation(project(":core:data"))
-
+    implementation(project(":core:util"))
 
 
     //dagger

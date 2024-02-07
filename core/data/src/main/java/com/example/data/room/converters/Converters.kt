@@ -1,6 +1,7 @@
 package com.example.data.room.converters
 
 import androidx.room.TypeConverter
+import com.example.data.models.PinList
 import com.example.data.models.TaskPinModel
 import com.example.data.models.TaskStatusModel
 import com.google.gson.Gson
@@ -29,7 +30,3 @@ class Converters {
     @TypeConverter
     fun toTaskPinListFromJSON(json: String): PinList = Gson().fromJson(json, PinList::class.java)
 }
-
-data class PinList(
-    val list: List<TaskPinModel> = listOf()
-)

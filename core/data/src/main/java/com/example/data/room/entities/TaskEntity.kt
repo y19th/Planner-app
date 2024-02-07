@@ -3,8 +3,8 @@ package com.example.data.room.entities
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.data.models.PinList
 import com.example.data.models.TaskStatusModel
-import com.example.data.room.converters.PinList
 
 @Entity(tableName = "task")
 data class TaskEntity(
