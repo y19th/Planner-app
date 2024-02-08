@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -47,11 +48,13 @@ fun TaskItem(
                 color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.weight(0.75f)
             )
+
+            Spacer(modifier = Modifier.weight(0.25f))
+
             Icon(
                 imageVector = vector(res = R.drawable.ic_task_dots),
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.weight(0.25f)
+                tint = MaterialTheme.colorScheme.onSurface
             )
         }
 
