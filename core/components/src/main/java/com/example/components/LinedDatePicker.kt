@@ -25,7 +25,7 @@ fun LinedDatePicker(
             text = title,
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.weight(0.1f)
+            modifier = Modifier.weight(0.2f)
         )
 
         Spacer(modifier = Modifier.weight(0.05f))

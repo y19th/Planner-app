@@ -43,7 +43,7 @@ fun HomeScreen(
     val state = viewModel.state.collectAsState().value
 
     val filterItems = rememberFilterItems()
-    
+
     val tasks = listOf(
         TaskModel(
             title = "Убраться в квартире и решить задачи",
@@ -77,18 +77,13 @@ fun HomeScreen(
             .fillMaxSize()
             .padding(start = 16.dp, end = 16.dp, top = 32.dp)
     ) {
-        Column(
-           modifier = modifier
-               .fillMaxWidth()
-        ){
-            Text(
-                text = stringResource(id = R.string.daily_planner),
-                style = MaterialTheme.typography.displayLarge,
-                color = MaterialTheme.colorScheme.onSurface,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
+        Text(
+            text = stringResource(id = R.string.daily_planner),
+            style = MaterialTheme.typography.displayLarge,
+            color = MaterialTheme.colorScheme.onSurface,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
+        )
 
         Spacer(modifier = Modifier.height(20.dp))
 

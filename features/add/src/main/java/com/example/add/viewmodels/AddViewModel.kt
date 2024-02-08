@@ -27,6 +27,17 @@ class AddViewModel @Inject constructor() : ViewModel() {
                     it.copy(taskTitle = event.newValue)
                 }
             }
+
+            is AddEvents.OnDateChange -> {
+                _state.update {
+                    it.copy(taskDate = event.newDate)
+                }
+            }
+            is AddEvents.OnDescriptionChange -> {
+                _state.update {
+                    it.copy(taskDescription = event.newDesc)
+                }
+            }
         }
     }
 }

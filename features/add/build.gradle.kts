@@ -56,6 +56,8 @@ dependencies {
     ksp ("com.google.dagger:hilt-compiler:$daggerVersion")
 
     implementation("androidx.compose.material3:material3:1.1.2")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.6.0")
+
 
 
     implementation("androidx.core:core-ktx:1.12.0")

@@ -7,8 +7,8 @@ import com.example.domain.models.TaskPin
 data class AddState(
     val taskTitle: String = "",
     val taskPins: List<TaskPin> = listOf(),
-    val taskFrom: String = "",
-    val taskTo: String = "",
-    val taskEmoji: String = "", /*TODO emoji type?*/
+    val taskDate: String = "",
+    val taskTimeFrom: String = "",
+    val taskTimeTo: String = "",
     val taskDescription: String = ""
 )
