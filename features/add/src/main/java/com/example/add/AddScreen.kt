@@ -2,15 +2,14 @@ package com.example.add
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -60,7 +59,7 @@ fun AddScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(top = 32.dp, start = 16.dp, end = 16.dp),
-        verticalArrangement = Arrangement.Top,
+        verticalArrangement = Arrangement.spacedBy(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
@@ -70,8 +69,6 @@ fun AddScreen(
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth()
         )
-
-        Spacer(modifier = Modifier.height(20.dp))
 
         MainDivider()
 
@@ -107,8 +104,6 @@ fun AddScreen(
             } 
         )
 
-        VerticalSpacer(height = 12.dp)
-
         AnimatedVisibility(
             visible = isTaskTyped
         ) {
@@ -125,10 +120,8 @@ fun AddScreen(
                     value = state.taskTimeTo
                 )
             }
-            VerticalSpacer(height = 12.dp)
         }
 
-        VerticalSpacer(height = 8.dp)
 
         LabelledTextField(
             value = state.taskDescription,
@@ -200,7 +193,10 @@ fun LabelledTextField(
                     Icon(
                         imageVector = Icons.Default.Clear,
                         contentDescription = null ,
-                        tint = MaterialTheme.colorScheme.onSurface
+                        tint = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.clickable {
+                            onValueChange.invoke("")
+                        }
                     )
                 }
             )
