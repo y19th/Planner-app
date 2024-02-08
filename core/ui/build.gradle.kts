@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -44,6 +45,7 @@ dependencies {
     val composeBomVersion = "2023.10.01"
 
     implementation(project(":core:domain"))
+    implementation(project(":core:util"))
 
 
     implementation("androidx.navigation:navigation-compose:$navigationVersion")

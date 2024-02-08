@@ -4,4 +4,13 @@
     <string name="home_destination">My tasks</string>
     <string name="add_destination">Add task</string>
     <string name="setting_destination">Settings</string>
+
+
+    <string name="status_cancelled">Провалено</string>
+    <string name="status_in_progress">В процессе</string>
+    <string name="status_completed">Выполнено</string>
+
+    <string name="bottom_my_tasks">Мои задачи</string>
+    <string name="bottom_add_task">Новая задача</string>
+    <string name="bottom_settings">Настройки</string>
 </resources>
