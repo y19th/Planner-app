@@ -15,12 +15,14 @@ import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.domain.models.nav.Routes
 import com.example.add.AddScreen
+import com.example.add.PinAddScreen
+import com.example.add.viewmodels.AddViewModel
+import com.example.domain.models.nav.Routes
 import com.example.home.HomeScreen
+import com.example.home.viewmodels.MainViewModel
 import com.example.settings.SettingsScreen
 import com.example.splash.SplashScreen
-import com.example.home.viewmodels.MainViewModel
 import com.example.util.AnimationDuration
 
 @Composable
@@ -48,7 +50,22 @@ fun NavHostContainer(
                 )
             }
             composable(Routes.ADD.name) {
-                AddScreen(navHostController)
+                AddScreen(
+                    navController = navHostController,
+                    viewModel = hiltViewModel(
+                        viewModelStoreOwner = viewModelStoreOwner,
+                        key = AddViewModel.TAG
+                    )
+                )
+            }
+            composable(Routes.ADD.routeWith(Routes.PIN.name)) {
+                PinAddScreen(
+                    navController = navHostController,
+                    viewModel = hiltViewModel(
+                        viewModelStoreOwner = viewModelStoreOwner,
+                        key = AddViewModel.TAG
+                    )
+                )
             }
             composable(Routes.SETTINGS.name) {
                 SettingsScreen()

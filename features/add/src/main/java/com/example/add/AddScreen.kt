@@ -9,6 +9,8 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,6 +18,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
@@ -27,6 +31,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -48,10 +53,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.add.components.PinBottomSheet
 import com.example.add.viewmodels.AddViewModel
 import com.example.components.LinedDatePicker
 import com.example.components.MainDivider
+import com.example.components.Pin
 import com.example.components.RoundedCoveringButton
 import com.example.components.VerticalSpacer
 import com.example.domain.events.AddEvents
@@ -69,27 +74,19 @@ fun PreviewAddScreen() {
 }
 
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun AddScreen(
     navController: NavController,
     viewModel: AddViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
-
-    val isTaskTyped by rememberSaveable(state.taskDate) {
-        mutableStateOf(state.taskDate.isNotEmpty())
-    }
-
-    var expandedSheet by rememberSaveable {
-        mutableStateOf(false)
-    }
     
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(top = 32.dp, start = 16.dp, end = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(20.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         Text(
             text = stringResource(id = R.string.add_tasks),
@@ -111,10 +108,10 @@ fun AddScreen(
 
         Row (
             modifier = Modifier
-                .fillMaxWidth()
-                .clickable { expandedSheet = true }
-                .clip(RoundedCornerShape(5.dp))
-            ,
+                .wrapContentWidth()
+                .align(Alignment.Start)
+                .clickable { viewModel.onEvent(AddEvents.OnNavigateToPin(navController)) }
+                .clip(CircleShape),
             verticalAlignment = Alignment.CenterVertically
         ){
             Text(
@@ -129,12 +126,27 @@ fun AddScreen(
             )
         }
 
-        if(expandedSheet) {
-            PinBottomSheet(
-                onDismiss = {
-                    expandedSheet = false
+        if(state.taskPins.isNotEmpty()) {
+            Column {
+                Text(
+                    text = stringResource(id = R.string.pin_now),
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+
+                VerticalSpacer(height = 4.dp)
+
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    repeat(state.taskPins.size) {
+                        Pin(
+                            pinTitle = state.taskPins[it].name,
+                            backgroundColor = state.taskPins[it].containerColor
+                        )
+                    }
                 }
-            )
+            }
         }
         
         LabelledTextField(
@@ -146,7 +158,7 @@ fun AddScreen(
         )
 
         AnimatedVisibility(
-            visible = isTaskTyped
+            visible = state.taskDate.isNotEmpty()
         ) {
             Column (
                 modifier = Modifier.fillMaxWidth(),
@@ -273,7 +285,7 @@ fun LabelledTextField(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun <T : Droppable<T>> LabelledTextDropDown(
+fun <T : Droppable> LabelledTextDropDown(
     modifier: Modifier = Modifier,
     label: String = "label",
     value: String,
@@ -317,9 +329,7 @@ fun <T : Droppable<T>> LabelledTextDropDown(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
-                    .clickable {
-                        isExposed = true
-                    }
+                    .menuAnchor()
                     .then(modifier),
                 value = value,
                 onValueChange = onValueChange,
@@ -374,15 +384,17 @@ fun <T : Droppable<T>> LabelledTextDropDown(
                     DropdownMenuItem(
                         text = {
                             Text(
-                                text = stringResource(id = item.string()),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onPrimary
+                                text = stringResource(id = item.stringId()),
+                                style = MaterialTheme.typography.bodySmall
                             )
                         },
                         onClick = {
                             onDropDownClick.invoke(item)
                             isExposed = false
-                        }
+                        },
+                        colors = MenuDefaults.itemColors(
+                            textColor = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
                     )
                 }
             }

@@ -1,5 +1,6 @@
 package com.example.domain.events
 
+import androidx.navigation.NavController
 import com.example.domain.models.Importance
 
 sealed interface AddEvents {
@@ -15,4 +16,8 @@ sealed interface AddEvents {
     data class OnPinImportanceChange(val newValue: Importance): AddEvents
 
     data class OnPinColorChange(val newValue: Int): AddEvents
+
+    data class OnNavigateToPin(val navController: NavController) : AddEvents
+
+    data class OnPinAddition(val navController: NavController): AddEvents
 }

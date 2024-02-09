@@ -47,4 +47,13 @@
     <string name="label_title_pin">Название бирки</string>
     <string name="label_importance_pin">Важность</string>
     <string name="label_preview_pin">Предпросмотр:</string>
+    <string name="new_pin">Новый пин</string>
+    <string name="pin_add">Добавить</string>
+    <string name="color_choose">Выбрать цвет</string>
+    <string name="color_ready">Готово</string>
+    <string name="color_choose_title">Выбор цвета</string>
+    <string name="color_choose_end">Выбранный цвет</string>
+    <string name="color_brightness">Яркость цвета</string>
+    <string name="pin_example">Очень важное</string>
+    <string name="pin_now">Текущие бирки:</string>
 </resources>

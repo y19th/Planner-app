@@ -2,10 +2,12 @@ package com.example.domain.models
 
 import com.example.domain.R
 
-sealed class Importance(val value: Int): Droppable<Importance> {
+sealed class Importance(val value: Int): Droppable {
 
     companion object {
         fun receiveAll() = listOf(Important,Medium,Low)
+
+        fun findByValue(value: Int) = Important.find(value)
     }
 
     data object Important: Importance(value = 2)
@@ -14,11 +16,11 @@ sealed class Importance(val value: Int): Droppable<Importance> {
 
     data object Low: Importance(value = 0)
 
-    override fun all(): List<Int> {
+    override fun allIds(): List<Int> {
         return listOf(
-            Important.string(),
-            Medium.string(),
-            Low.string()
+            Important.stringId(),
+            Medium.stringId(),
+            Low.stringId()
         )
     }
 
@@ -31,7 +33,7 @@ sealed class Importance(val value: Int): Droppable<Importance> {
         }
     }
 
-    override fun string(): Int {
+    override fun stringId(): Int {
         return when(this) {
             is Important -> {
                 R.string.importance_important
@@ -46,8 +48,8 @@ sealed class Importance(val value: Int): Droppable<Importance> {
     }
 }
 
-interface Droppable<T> {
-    fun string(): Int
-    fun all(): List<Int>
-    fun find(value: Int): T
+interface Droppable {
+    fun stringId(): Int
+    fun allIds(): List<Int>
+    fun find(value: Int): Droppable
 }

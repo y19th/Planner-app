@@ -7,6 +7,6 @@ import androidx.compose.ui.graphics.Color
 data class TaskPinModel(
     val name: String = "pin",
     val containerColor: Color = Color.Transparent,
-    val textColor: Color = Color.Black
-
+    val textColor: Color = Color.Black,
+    val valueImportance: Int = 0
 )
