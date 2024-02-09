@@ -1,5 +1,6 @@
 package com.example.add.viewmodels
 
+import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.ViewModel
 import com.example.domain.events.AddEvents
 import com.example.domain.models.Importance
@@ -58,7 +59,7 @@ class AddViewModel @Inject constructor() : ViewModel() {
             }
 
             is AddEvents.OnNavigateToPin -> {
-                event.navController.navigate(Routes.ADD.routeWith(Routes.PIN.name))
+                event.navController.navigate(Routes.ADD.routeWith(event.pinId))
             }
 
             is AddEvents.OnPinAddition -> {
@@ -74,15 +75,49 @@ class AddViewModel @Inject constructor() : ViewModel() {
                             )
                         )
                     }
-                    _pinState.update {
-                        it.copy(
-                            title = "",
-                            importance = Importance.Medium
-                        )
-                    }
+                    pinStateToDefault()
                     event.navController.navigateUp()
                 }
             }
+            is AddEvents.OnPinUpdate -> {
+                val mappedList = state.value.taskPins.map { pin ->
+                    return@map if(pin.id == event.pinId) pin.copy(
+                        name = pinState.value.title,
+                        containerColor = pinState.value.color.toColor(),
+                        importance = pinState.value.importance
+                    ) else pin
+                }
+
+                _state.update {
+                    it.copy(
+                        taskPins = mappedList
+                    )
+                }
+                pinStateToDefault()
+                event.navController.navigateUp()
+            }
+        }
+    }
+
+    fun setPinState(pinId: String) {
+        val found = state.value.taskPins.find { pin -> pin.id == pinId }
+        found?.let { pin ->
+            _pinState.update {
+                it.copy(
+                    title = pin.name,
+                    importance = pin.importance,
+                    color = pin.containerColor.toArgb()
+                )
+            }
+        }
+    }
+
+    private fun pinStateToDefault() {
+        _pinState.update {
+            it.copy(
+                title = "",
+                importance = Importance.Medium
+            )
         }
     }
 

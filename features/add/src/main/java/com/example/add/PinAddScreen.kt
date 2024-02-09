@@ -19,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,17 +42,29 @@ import com.example.components.RoundedCoveringButton
 import com.example.components.VerticalSpacer
 import com.example.domain.events.AddEvents
 import com.example.domain.models.Importance
+import com.example.domain.models.TaskPin
 import com.example.ui.R
 import com.example.util.extension.toColor
 
 @Composable
 fun PinAddScreen(
     viewModel: AddViewModel = hiltViewModel(),
-    navController: NavController
+    navController: NavController,
+    pinId: String = ""
 ) {
     val state by viewModel.pinState.collectAsState()
     var dialogExposed by rememberSaveable {
         mutableStateOf(false)
+    }
+
+    val isEditMode by rememberSaveable(pinId) {
+        mutableStateOf(pinId != TaskPin.DefaultId)
+    }
+
+    LaunchedEffect(pinId) {
+        if (isEditMode) {
+            viewModel.setPinState(pinId)
+        }
     }
 
     Column(
@@ -64,17 +77,21 @@ fun PinAddScreen(
             modifier = Modifier.fillMaxWidth()
         ){
             Icon(
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .clickable { navController.navigateUp() },
                 imageVector = Icons.AutoMirrored.Default.KeyboardArrowLeft,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.clickable { navController.navigateUp() }
+                tint = MaterialTheme.colorScheme.onSurface
             )
             Text(
-                text = stringResource(id = R.string.new_pin),
+                modifier = Modifier.fillMaxWidth(),
+                text = stringResource(
+                    id = if (isEditMode) R.string.edit_pin else R.string.new_pin
+                ),
                 style = MaterialTheme.typography.displayMedium,
                 color = MaterialTheme.colorScheme.onSurface,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
+                textAlign = TextAlign.Center
             )
         }
 
@@ -145,11 +162,20 @@ fun PinAddScreen(
         RoundedCoveringButton(
             shape = RoundedCornerShape(5.dp),
             onButtonClick = {
-                viewModel.onEvent(AddEvents.OnPinAddition(navController))
+                if(isEditMode) {
+                    viewModel.onEvent(AddEvents.OnPinUpdate(
+                        pinId = pinId,
+                        navController = navController
+                    ))
+                } else {
+                    viewModel.onEvent(AddEvents.OnPinAddition(navController))
+                }
             }
         ) {
             Text(
-                text = stringResource(id = R.string.pin_add),
+                text = stringResource(
+                    id = if(isEditMode) R.string.pin_edit else R.string.pin_add
+                ),
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onPrimary
             )
@@ -157,6 +183,7 @@ fun PinAddScreen(
 
         if(dialogExposed) {
             ColorPickerBottomSheet(
+                initialColor = state.color.toColor(),
                 onColorChange = {
                     viewModel.onEvent(
                         AddEvents.OnPinColorChange(newValue = it.toArgb())
@@ -164,8 +191,7 @@ fun PinAddScreen(
                 },
                 onDismiss = {
                     dialogExposed = false
-                },
-                initialColor = state.color.toColor()
+                }
             )
         }
     }

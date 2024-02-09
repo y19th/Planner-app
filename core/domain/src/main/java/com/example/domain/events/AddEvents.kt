@@ -17,7 +17,9 @@ sealed interface AddEvents {
 
     data class OnPinColorChange(val newValue: Int): AddEvents
 
-    data class OnNavigateToPin(val navController: NavController) : AddEvents
+    data class OnNavigateToPin(val pinId: String, val navController: NavController) : AddEvents
 
     data class OnPinAddition(val navController: NavController): AddEvents
+
+    data class OnPinUpdate(val pinId: String, val navController: NavController): AddEvents
 }

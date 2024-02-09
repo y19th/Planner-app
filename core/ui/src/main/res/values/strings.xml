@@ -48,7 +48,9 @@
     <string name="label_importance_pin">Важность</string>
     <string name="label_preview_pin">Предпросмотр:</string>
     <string name="new_pin">Новый пин</string>
+    <string name="edit_pin">Изменить пин</string>
     <string name="pin_add">Добавить</string>
+    <string name="pin_edit">Изменить</string>
     <string name="color_choose">Выбрать цвет</string>
     <string name="color_ready">Готово</string>
     <string name="color_choose_title">Выбор цвета</string>

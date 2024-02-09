@@ -61,6 +61,7 @@ import com.example.components.RoundedCoveringButton
 import com.example.components.VerticalSpacer
 import com.example.domain.events.AddEvents
 import com.example.domain.models.Droppable
+import com.example.domain.models.TaskPin
 import com.example.ui.R
 import com.example.ui.theme.MainTheme
 
@@ -110,7 +111,14 @@ fun AddScreen(
             modifier = Modifier
                 .wrapContentWidth()
                 .align(Alignment.Start)
-                .clickable { viewModel.onEvent(AddEvents.OnNavigateToPin(navController)) }
+                .clickable {
+                    viewModel.onEvent(
+                        AddEvents.OnNavigateToPin(
+                            pinId = TaskPin.DefaultId,
+                            navController = navController
+                        )
+                    )
+                }
                 .clip(CircleShape),
             verticalAlignment = Alignment.CenterVertically
         ){
@@ -141,6 +149,13 @@ fun AddScreen(
                 ) {
                     repeat(state.taskPins.size) {
                         Pin(
+                            modifier = Modifier
+                                .clickable {
+                                   viewModel.onEvent(AddEvents.OnNavigateToPin(
+                                       pinId = state.taskPins[it].id,
+                                       navController = navController
+                                   ))
+                                },
                             pinTitle = state.taskPins[it].name,
                             backgroundColor = state.taskPins[it].containerColor
                         )

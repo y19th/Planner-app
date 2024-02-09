@@ -13,8 +13,10 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.example.add.AddScreen
 import com.example.add.PinAddScreen
 import com.example.add.viewmodels.AddViewModel
@@ -58,13 +60,17 @@ fun NavHostContainer(
                     )
                 )
             }
-            composable(Routes.ADD.routeWith(Routes.PIN.name)) {
+            composable(
+                route = Routes.ADD.routeWith("{pinId}"),
+                arguments = listOf(navArgument("pinId") { type = NavType.StringType})
+            ) {
                 PinAddScreen(
                     navController = navHostController,
                     viewModel = hiltViewModel(
                         viewModelStoreOwner = viewModelStoreOwner,
                         key = AddViewModel.TAG
-                    )
+                    ),
+                    pinId = it.arguments?.getString("pinId") ?: ""
                 )
             }
             composable(Routes.SETTINGS.name) {
