@@ -31,30 +31,27 @@ val Typography = Typography(
     displayLarge = TextStyle(
         fontFamily = MainFontFamily,
         fontWeight = FontWeight.SemiBold,
-        fontSize = 20.sp
+        fontSize = 24.sp
     ),
     displayMedium = TextStyle(
         fontFamily = MainFontFamily,
         fontWeight = FontWeight.SemiBold,
-        fontSize = 40.sp,
-        letterSpacing = 2.sp
+        fontSize = 20.sp
     ),
     displaySmall = TextStyle(
         fontFamily = MainFontFamily,
         fontWeight = FontWeight.Medium,
-        fontSize = 24.sp,
-        letterSpacing = 0.96.sp
+        fontSize = 16.sp
     ),
     titleLarge = TextStyle(
         fontFamily = MainFontFamily,
         fontWeight = FontWeight.Medium,
-        fontSize = 28.sp,
-        letterSpacing = 0.48.sp
+        fontSize = 20.sp
     ),
     titleMedium = TextStyle(
         fontFamily = MainFontFamily,
         fontWeight = FontWeight.Medium,
-        fontSize = 20.sp
+        fontSize = 16.sp
     ),
     titleSmall = TextStyle(
         fontFamily = MainFontFamily,
@@ -63,14 +60,13 @@ val Typography = Typography(
     ),
     bodyLarge = TextStyle(
         fontFamily = MainFontFamily,
-        fontWeight = FontWeight.Light,
-        fontSize = 20.sp,
-        letterSpacing = 0.48.sp
+        fontWeight = FontWeight.Normal,
+        fontSize = 18.sp
     ),
     bodyMedium = TextStyle(
         fontFamily = MainFontFamily,
-        fontWeight = FontWeight.Medium,
-        fontSize = 12.sp
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp
     ),
     bodySmall = TextStyle(
         fontFamily = MainFontFamily,
@@ -83,10 +79,15 @@ val Typography = Typography(
         fontSize = 16.sp,
         letterSpacing = 0.96.sp
     ),
-    labelSmall = TextStyle(
+    labelMedium = TextStyle(
         fontFamily = MainFontFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 12.sp,
         letterSpacing = 0.48.sp
+    ),
+    labelSmall = TextStyle(
+        fontFamily = MainFontFamily,
+        fontWeight = FontWeight.Medium,
+        fontSize = 10.sp
     )
 )

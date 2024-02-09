@@ -29,7 +29,7 @@ fun Pin(
     ) {
         Text(
             text = pinTitle,
-            style = MaterialTheme.typography.labelSmall,
+            style = MaterialTheme.typography.labelMedium,
             color = textColor
         )
     }

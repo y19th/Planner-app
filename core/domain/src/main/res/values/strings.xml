@@ -13,4 +13,8 @@
     <string name="bottom_my_tasks">Мои задачи</string>
     <string name="bottom_add_task">Новая задача</string>
     <string name="bottom_settings">Настройки</string>
+
+    <string name="importance_important">Важное</string>
+    <string name="importance_medium">Среднее</string>
+    <string name="importance_low">Неважное</string>
 </resources>

@@ -73,7 +73,7 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun MainTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable (PaddingValues, NavHostController) -> Unit
 ) {
 
@@ -142,7 +142,7 @@ fun BottomBarTheme(
     )
 }
 
-
+/* TODO make bottom bar background color not transparent*/
 @Composable
 fun MainBottomBar(
     navController: NavController

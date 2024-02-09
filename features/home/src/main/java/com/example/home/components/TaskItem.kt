@@ -63,12 +63,12 @@ fun TaskItem(
         Row (horizontalArrangement = Arrangement.spacedBy(4.dp)){
             Text(
                 text = stringResource(id = R.string.status_task),
-                style = MaterialTheme.typography.labelSmall,
+                style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.outline
             )
             Text(
                 text = stringResource(id = model.status.value()),
-                style = MaterialTheme.typography.labelSmall,
+                style = MaterialTheme.typography.labelMedium,
                 color = model.status.color()
                 )
 
@@ -77,12 +77,12 @@ fun TaskItem(
         Row (horizontalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(
                 text = stringResource(id = R.string.deadline),
-                style = MaterialTheme.typography.labelSmall,
+                style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.outline
             )
             Text(
                 text = taskDeadLine,
-                style = MaterialTheme.typography.labelSmall,
+                style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.outline
             )
 
@@ -121,7 +121,7 @@ fun TaskItem(
             ) {
                 Text(
                     text = stringResource(id = R.string.done),
-                    style = MaterialTheme.typography.labelSmall
+                    style = MaterialTheme.typography.labelMedium
                 )
             }
         }

@@ -79,7 +79,7 @@ fun HomeScreen(
     ) {
         Text(
             text = stringResource(id = R.string.daily_planner),
-            style = MaterialTheme.typography.displayLarge,
+            style = MaterialTheme.typography.displayMedium,
             color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth()
@@ -102,7 +102,7 @@ fun HomeScreen(
             ) {
                 Text(
                     text = stringResource(id = filterItems.first()),
-                    style = MaterialTheme.typography.labelSmall,
+                    style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Icon(
@@ -122,7 +122,7 @@ fun HomeScreen(
                 )
                 Text(
                     text = stringResource(id = R.string.filters),
-                    style = MaterialTheme.typography.labelSmall,
+                    style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
             }

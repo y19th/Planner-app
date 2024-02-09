@@ -2,6 +2,7 @@ package com.example.add.viewmodels
 
 import androidx.lifecycle.ViewModel
 import com.example.domain.events.AddEvents
+import com.example.domain.states.AddPinState
 import com.example.domain.states.AddState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,25 +20,48 @@ class AddViewModel @Inject constructor() : ViewModel() {
     private val _state = MutableStateFlow(AddState())
     val state = _state.asStateFlow()
 
+    private val _pinState = MutableStateFlow(AddPinState())
+    val pinState = _pinState.asStateFlow()
+
 
     fun onEvent(event: AddEvents) {
         when(event) {
-            is AddEvents.OnChangeTaskTitle -> {
-                _state.update {
-                    it.copy(taskTitle = event.newValue)
-                }
+            is AddEvents.OnTaskTitleChange -> {
+                _state.update { it.copy(taskTitle = event.newValue) }
+                updateValid()
             }
 
             is AddEvents.OnDateChange -> {
-                _state.update {
-                    it.copy(taskDate = event.newDate)
-                }
+                _state.update { it.copy(taskDate = event.newDate) }
+                updateValid()
             }
             is AddEvents.OnDescriptionChange -> {
-                _state.update {
-                    it.copy(taskDescription = event.newDesc)
-                }
+                _state.update { it.copy(taskDescription = event.newDesc) }
+                updateValid()
+            }
+            is AddEvents.OnPinTitleChange -> {
+                _pinState.update { it.copy(title = event.newValue) }
+            }
+            is AddEvents.OnPinImportanceChange -> {
+                _pinState.update { it.copy(importance = event.newValue) }
+            }
+            is AddEvents.OnPinColorChange -> {
+                _pinState.update { it.copy(color = event.newValue) }
             }
         }
     }
+
+    private fun updateValid() {
+        val isValid = checkValidFields()
+        if(isValid != state.value.isValid) {
+            _state.update { it.copy(isValid = isValid) }
+        }
+    }
+
+    private fun checkValidFields(): Boolean {
+        with(state.value) {
+            return taskTitle.isNotEmpty() && taskDescription.isNotEmpty() && taskDate.isNotEmpty()
+        }
+    }
+
 }

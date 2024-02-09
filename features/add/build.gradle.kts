@@ -53,6 +53,7 @@ dependencies {
     //hilt
     implementation ("com.google.dagger:hilt-android:$daggerVersion")
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
+    debugImplementation("androidx.compose.ui:ui-tooling:1.6.0")
     ksp ("com.google.dagger:hilt-compiler:$daggerVersion")
 
     implementation("androidx.compose.material3:material3:1.1.2")

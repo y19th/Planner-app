@@ -10,5 +10,8 @@ data class AddState(
     val taskDate: String = "",
     val taskTimeFrom: String = "",
     val taskTimeTo: String = "",
-    val taskDescription: String = ""
+    val taskDescription: String = "",
+
+
+    val isValid: Boolean = false
 )

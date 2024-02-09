@@ -9,6 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
+
+
 @Composable
 fun LinedDatePicker(
     modifier: Modifier = Modifier,
@@ -23,15 +25,15 @@ fun LinedDatePicker(
     ) {
         Text(
             text = title,
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.titleSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.weight(0.2f)
+            modifier = Modifier.weight(0.3f)
         )
 
         Spacer(modifier = Modifier.weight(0.05f))
 
         LinedText(
-            modifier = Modifier.weight(0.85f),
+            modifier = Modifier.weight(0.65f),
             text = value
         )
     }

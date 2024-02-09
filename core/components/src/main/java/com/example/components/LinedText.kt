@@ -40,12 +40,12 @@ fun LinedText(
 
     Text(
         text = text,
-        style = MaterialTheme.typography.bodyMedium,
+        style = MaterialTheme.typography.labelSmall,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
         modifier = Modifier
             .wrapContentSize(align = Alignment.CenterStart)
             .widthIn(
-                min = 64.dp
+                min = 96.dp
             )
             .pointerInput(Unit) {
                 detectTapGestures { focused = focused.not() }

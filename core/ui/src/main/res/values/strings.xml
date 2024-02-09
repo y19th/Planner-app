@@ -43,4 +43,8 @@
     <string name="label_time_from">Время начала</string>
     <string name="label_time_to">Время окончания</string>
     <string name="label_desc">Описание задачи</string>
+    <string name="add_task">Запланировать</string>
+    <string name="label_title_pin">Название бирки</string>
+    <string name="label_importance_pin">Важность</string>
+    <string name="label_preview_pin">Предпросмотр:</string>
 </resources>
