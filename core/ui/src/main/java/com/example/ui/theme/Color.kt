@@ -32,3 +32,8 @@ val Success = Color(0xFFB2FF8E)
 val OnSuccess = Color(0xFF316F30)
 val SuccessContainer = Color(0xD6D4FFBF)
 val OnSuccessContainer = Color(0xFF316F30)
+
+val Error = Color(0xFFFF3C3C)
+val OnError = Color(0xFFF3F3F3)
+val ErrorContainer = Color(0xFFFF7A72)
+val OnErrorContainer = Color(0xFFFFDDDD)

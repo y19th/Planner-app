@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
@@ -52,7 +51,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.add.viewmodels.AddViewModel
 import com.example.components.LinedDatePicker
 import com.example.components.MainDivider
@@ -63,17 +61,6 @@ import com.example.domain.events.AddEvents
 import com.example.domain.models.Droppable
 import com.example.domain.models.TaskPin
 import com.example.ui.R
-import com.example.ui.theme.MainTheme
-
-//@Preview(showBackground = true)
-//@PreviewScreenSizes
-@Composable
-fun PreviewAddScreen() {
-    MainTheme { innerPadding, navController ->
-        AddScreen(navController = rememberNavController())
-    }
-}
-
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -111,6 +98,7 @@ fun AddScreen(
             modifier = Modifier
                 .wrapContentWidth()
                 .align(Alignment.Start)
+                .clip(RoundedCornerShape(5.dp))
                 .clickable {
                     viewModel.onEvent(
                         AddEvents.OnNavigateToPin(
@@ -118,8 +106,7 @@ fun AddScreen(
                             navController = navController
                         )
                     )
-                }
-                .clip(CircleShape),
+                },
             verticalAlignment = Alignment.CenterVertically
         ){
             Text(
@@ -203,8 +190,7 @@ fun AddScreen(
 
         RoundedCoveringButton(
             onButtonClick = { /*TODO*/ },
-            enabled = state.isValid,
-            shape = RoundedCornerShape(5.dp)
+            enabled = state.isValid
         ) {
             Text(
                 text = stringResource(id = R.string.add_task),

@@ -1,5 +1,6 @@
 package com.example.add.viewmodels
 
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.ViewModel
 import com.example.domain.events.AddEvents
@@ -75,8 +76,8 @@ class AddViewModel @Inject constructor() : ViewModel() {
                             )
                         )
                     }
-                    pinStateToDefault()
                     event.navController.navigateUp()
+                    pinStateToDefault()
                 }
             }
             is AddEvents.OnPinUpdate -> {
@@ -93,8 +94,21 @@ class AddViewModel @Inject constructor() : ViewModel() {
                         taskPins = mappedList
                     )
                 }
-                pinStateToDefault()
                 event.navController.navigateUp()
+                pinStateToDefault()
+            }
+            is AddEvents.OnPinNavigateUp -> {
+                event.navController.navigateUp()
+                pinStateToDefault()
+            }
+            is AddEvents.OnPinDelete -> {
+                _state.update {
+                    it.copy(
+                        taskPins = state.value.taskPins.filterNot { pin -> pin.id == event.pinId }
+                    )
+                }
+                event.navController.navigateUp()
+                pinStateToDefault()
             }
         }
     }
@@ -116,7 +130,8 @@ class AddViewModel @Inject constructor() : ViewModel() {
         _pinState.update {
             it.copy(
                 title = "",
-                importance = Importance.Medium
+                importance = Importance.Medium,
+                color = Color.Unspecified.toArgb()
             )
         }
     }

@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.structuralEqualityPolicy
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 
 var successColorScheme by mutableStateOf(Color.Green, structuralEqualityPolicy())
     private set
@@ -41,3 +42,7 @@ var ColorScheme.onSuccessVariant: Color
     set(value) {
         onSuccessVariantColorScheme = value
     }
+
+fun Color.Companion.adaptive(backgroundColor: Color): Color {
+    return if(backgroundColor.luminance() > 0.6) Black else White
+}

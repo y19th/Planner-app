@@ -15,14 +15,17 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -44,6 +47,7 @@ import com.example.domain.events.AddEvents
 import com.example.domain.models.Importance
 import com.example.domain.models.TaskPin
 import com.example.ui.R
+import com.example.ui.theme.Success
 import com.example.util.extension.toColor
 
 @Composable
@@ -79,7 +83,10 @@ fun PinAddScreen(
             Icon(
                 modifier = Modifier
                     .clip(CircleShape)
-                    .clickable { navController.navigateUp() },
+                    .clickable {
+                        if (isEditMode) viewModel.onEvent(AddEvents.OnPinNavigateUp(navController))
+                        else navController.navigateUp()
+                    },
                 imageVector = Icons.AutoMirrored.Default.KeyboardArrowLeft,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurface
@@ -115,52 +122,55 @@ fun PinAddScreen(
             dropDownItems = rememberImportanceItems(),
         )
 
-        Row(
-            modifier = Modifier
-                .clip(CircleShape)
-                .clickable { dialogExposed = true },
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = stringResource(id = R.string.color_choose),
-                style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-            Icon(
-                imageVector = Icons.AutoMirrored.Default.KeyboardArrowRight,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurface
-            )
-        }
-        AnimatedVisibility(
-            visible = state.color != Color.White.toArgb()) {
-
-        }
-        if(state.color != Color.White.toArgb()) {
+        Column {
             Row(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(5.dp))
+                    .clickable { dialogExposed = true },
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = stringResource(id = R.string.color_choose_end),
+                    text = stringResource(id = R.string.color_choose),
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface
                 )
-
-                HorizontalSpacer(width = 4.dp)
-
-                Box(
-                    modifier = Modifier
-                        .size(16.dp)
-                        .background(
-                            color = state.color.toColor(),
-                            shape = RoundedCornerShape(2.dp)
-                        )
+                Icon(
+                    imageVector = Icons.AutoMirrored.Default.KeyboardArrowRight,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurface
                 )
+            }
+            AnimatedVisibility(
+                visible = state.color != Color.Unspecified.toArgb()
+            ) {
+
+                VerticalSpacer(height = 4.dp)
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.color_choose_end),
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.outline
+                    )
+
+                    HorizontalSpacer(width = 4.dp)
+
+                    Box(
+                        modifier = Modifier
+                            .size(16.dp)
+                            .background(
+                                color = state.color.toColor(),
+                                shape = RoundedCornerShape(2.dp)
+                            )
+                    )
+                }
             }
         }
 
         RoundedCoveringButton(
-            shape = RoundedCornerShape(5.dp),
+            enabled = state.title.isNotEmpty() && state.color != Color.Unspecified.toArgb(),
             onButtonClick = {
                 if(isEditMode) {
                     viewModel.onEvent(AddEvents.OnPinUpdate(
@@ -180,10 +190,29 @@ fun PinAddScreen(
                 color = MaterialTheme.colorScheme.onPrimary
             )
         }
-
+        if(isEditMode) {
+            RoundedCoveringButton(
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.errorContainer,
+                    contentColor = MaterialTheme.colorScheme.onErrorContainer
+                ),
+                onButtonClick = {
+                    viewModel.onEvent(AddEvents.OnPinDelete(
+                        navController = navController,
+                        pinId = pinId
+                    ))
+                }
+            ) {
+                Text(
+                    text = stringResource(id = R.string.pin_delete),
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            }
+        }
         if(dialogExposed) {
             ColorPickerBottomSheet(
-                initialColor = state.color.toColor(),
+                initialColor = Success,
                 onColorChange = {
                     viewModel.onEvent(
                         AddEvents.OnPinColorChange(newValue = it.toArgb())
@@ -197,8 +226,18 @@ fun PinAddScreen(
     }
 }
 
-
+@Stable
 @Composable
 private fun rememberImportanceItems(): List<Importance> {
-    return Importance.receiveAll()
+    return remember {
+        Importance.receiveAll()
+    }
+}
+
+private fun Color.notUnspecified(): Color {
+    return if (this != Color.Unspecified) this else Color.White
+}
+
+fun Int.toUColor(): Color {
+    return Color(Color(this).value)
 }

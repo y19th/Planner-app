@@ -2,11 +2,8 @@ package com.example.add.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -24,13 +21,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.components.ColorPalette
 import com.example.components.HorizontalSpacer
 import com.example.components.Pin
 import com.example.components.RoundedCoveringButton
 import com.example.components.VerticalSpacer
 import com.example.ui.R
-import com.github.skydoves.colorpicker.compose.BrightnessSlider
-import com.github.skydoves.colorpicker.compose.HsvColorPicker
+import com.example.util.extension.adaptive
 import com.github.skydoves.colorpicker.compose.rememberColorPickerController
 import kotlinx.coroutines.launch
 
@@ -64,7 +61,7 @@ fun ColorPickerBottomSheet(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            HsvColorPicker(
+            /*HsvColorPicker(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .fillMaxWidth(0.5f)
@@ -75,29 +72,16 @@ fun ColorPickerBottomSheet(
                 onColorChanged = {
                     color = it.color
                 }
+            )*/
+
+            ColorPalette(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                onColorChange = {
+                    color = it
+                }
             )
 
             VerticalSpacer(height = 12.dp)
-
-            Text(
-                text = stringResource(id = R.string.color_brightness) ,
-                style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-
-            VerticalSpacer(height = 4.dp)
-
-            BrightnessSlider(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(28.dp)
-                ,
-                controller = controller,
-                wheelRadius = 12.dp,
-                initialColor = color
-            )
-
-            VerticalSpacer(height = 8.dp)
 
             Row(
                 verticalAlignment = Alignment.CenterVertically
@@ -111,14 +95,14 @@ fun ColorPickerBottomSheet(
 
                 Pin(
                     pinTitle = stringResource(id = R.string.pin_example),
-                    backgroundColor = color
+                    backgroundColor = color,
+                    textColor = Color.adaptive(color)
                 )
             }
 
             VerticalSpacer(height = 32.dp)
 
             RoundedCoveringButton(
-                shape = RoundedCornerShape(5.dp),
                 onButtonClick = {
                     coroutineScope.launch {
                         onColorChange.invoke(color)

@@ -7,5 +7,5 @@ import com.example.domain.models.Importance
 data class PinState(
     val title: String = "",
     val importance: Importance = Importance.Medium,
-    val color: Int = Color.White.toArgb()
+    val color: Int = Color.Unspecified.toArgb()
 )

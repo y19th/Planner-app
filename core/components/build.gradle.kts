@@ -45,9 +45,12 @@ dependencies {
 
     implementation(project(":core:util"))
 
+
+    implementation("androidx.compose.ui:ui-tooling-preview:1.6.0")
     implementation("androidx.core:core-ktx:1.12.0")
     implementation(platform("androidx.compose:compose-bom:$composeBomVersion"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.material3:material3:1.1.2")
     implementation("androidx.compose.material:material:1.6.0")
+    debugImplementation("androidx.compose.ui:ui-tooling:1.6.0")
 }

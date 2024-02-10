@@ -66,7 +66,12 @@ private val LightColorScheme = lightColorScheme(
     onTertiary = OnTertiary,
 
     outline = Outline,
-    outlineVariant = OutlineVariant
+    outlineVariant = OutlineVariant,
+
+    error = Error,
+    onError = OnError,
+    errorContainer = ErrorContainer,
+    onErrorContainer = OnErrorContainer
 
 )
 
@@ -89,14 +94,14 @@ fun MainTheme(
             /*TODO dark colors of success*/
             DarkColorScheme.apply {
                 success = Success
-                onSuccess = onSuccess
+                onSuccess = OnSuccess
                 successVariant = SuccessContainer
                 onSuccessVariant = OnSuccessContainer
             }
         }
         else -> LightColorScheme.apply {
             success = Success
-            onSuccess = onSuccess
+            onSuccess = OnSuccess
             successVariant = SuccessContainer
             onSuccessVariant = OnSuccessContainer
         }

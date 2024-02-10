@@ -51,6 +51,7 @@
     <string name="edit_pin">Изменить пин</string>
     <string name="pin_add">Добавить</string>
     <string name="pin_edit">Изменить</string>
+    <string name="pin_delete">Удалить</string>
     <string name="color_choose">Выбрать цвет</string>
     <string name="color_ready">Готово</string>
     <string name="color_choose_title">Выбор цвета</string>
