@@ -55,8 +55,6 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
     ksp ("com.google.dagger:hilt-compiler:$daggerVersion")
 
-    //color picker
-    implementation("com.github.skydoves:colorpicker-compose:1.0.7")
 
     implementation("androidx.compose.material3:material3:1.1.2")
     implementation("androidx.compose.ui:ui-tooling-preview:1.6.0")

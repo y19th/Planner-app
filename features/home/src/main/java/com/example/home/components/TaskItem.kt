@@ -95,7 +95,7 @@ fun TaskItem(
             repeat(model.taskPin.size) { index ->
                 with(model.taskPin[index]) {
                     Pin(
-                        pinTitle = name,
+                        title = name,
                         backgroundColor = containerColor,
                         textColor = textColor
                     )

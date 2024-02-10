@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun Pin(
     modifier: Modifier = Modifier,
-    pinTitle: String = "pin",
+    title: String = "pin",
     backgroundColor: Color = MaterialTheme.colorScheme.secondary,
     textColor: Color = MaterialTheme.colorScheme.onSecondary
 ) {
@@ -31,7 +31,7 @@ fun Pin(
 
     ) {
         Text(
-            text = pinTitle,
+            text = title,
             style = MaterialTheme.typography.labelMedium,
             color = textColor
         )

@@ -41,6 +41,8 @@ import androidx.navigation.NavController
 import com.example.add.components.ColorPickerBottomSheet
 import com.example.add.viewmodels.AddViewModel
 import com.example.components.HorizontalSpacer
+import com.example.components.LabelledTextDropDown
+import com.example.components.LabelledTextField
 import com.example.components.RoundedCoveringButton
 import com.example.components.VerticalSpacer
 import com.example.domain.events.AddEvents

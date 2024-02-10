@@ -29,7 +29,6 @@ import com.example.components.RoundedCoveringButton
 import com.example.components.VerticalSpacer
 import com.example.ui.R
 import com.example.util.extension.adaptive
-import com.github.skydoves.colorpicker.compose.rememberColorPickerController
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,7 +38,6 @@ fun ColorPickerBottomSheet(
     onColorChange: (Color) -> Unit,
     onDismiss: () -> Unit
 ) {
-    val controller = rememberColorPickerController()
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
     )
@@ -89,7 +87,7 @@ fun ColorPickerBottomSheet(
                 HorizontalSpacer(width = 12.dp)
 
                 Pin(
-                    pinTitle = stringResource(id = R.string.pin_example),
+                    title = stringResource(id = R.string.pin_example),
                     backgroundColor = color,
                     textColor = Color.adaptive(color)
                 )

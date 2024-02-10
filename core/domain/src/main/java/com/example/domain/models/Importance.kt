@@ -3,6 +3,7 @@ package com.example.domain.models
 import android.os.Parcelable
 import androidx.compose.runtime.Immutable
 import com.example.domain.R
+import com.example.util.Droppable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -51,10 +52,4 @@ sealed class Importance(val value: Int): Droppable, Parcelable {
             }
         }
     }
-}
-
-interface Droppable {
-    fun stringId(): Int
-    fun allIds(): List<Int>
-    fun find(value: Int): Droppable
 }
