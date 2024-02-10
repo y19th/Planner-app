@@ -1,11 +1,5 @@
 package com.example.planner_app
 
-import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.core.EaseIn
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -25,7 +19,7 @@ import com.example.home.HomeScreen
 import com.example.home.viewmodels.MainViewModel
 import com.example.settings.SettingsScreen
 import com.example.splash.SplashScreen
-import com.example.util.AnimationDuration
+import com.example.util.Animations
 
 @Composable
 fun NavHostContainer(
@@ -37,13 +31,17 @@ fun NavHostContainer(
         "No viewModelStoreOwner provided"
     }
 
-
     NavHost(
         navController = navHostController,
         startDestination = Routes.SPLASH.name,
         modifier = Modifier.padding(paddingValues = paddingValues),
         builder = {
-            composable(Routes.HOME.name) {
+            composable(
+                route = Routes.HOME.name,
+                enterTransition = { Animations.slideInWithFadeFromBottom },
+                exitTransition = { Animations.fastFadeOut },
+                popEnterTransition = { Animations.mediumFadeIn }
+            ) {
                 HomeScreen(
                     viewModel = hiltViewModel(
                         viewModelStoreOwner = viewModelStoreOwner,
@@ -51,7 +49,12 @@ fun NavHostContainer(
                     )
                 )
             }
-            composable(Routes.ADD.name) {
+            composable(
+                route = Routes.ADD.name,
+                enterTransition = { Animations.slideInWithFadeFromBottom },
+                exitTransition = { Animations.fastFadeOut },
+                popEnterTransition = { Animations.mediumFadeIn }
+            ) {
                 AddScreen(
                     navController = navHostController,
                     viewModel = hiltViewModel(
@@ -62,7 +65,9 @@ fun NavHostContainer(
             }
             composable(
                 route = Routes.ADD.routeWith("{pinId}"),
-                arguments = listOf(navArgument("pinId") { type = NavType.StringType})
+                arguments = listOf(navArgument("pinId") { type = NavType.StringType}),
+                enterTransition = { Animations.slideInWithFadeFromRight },
+                exitTransition = { Animations.slideOutWithFadeToRight }
             ) {
                 PinAddScreen(
                     navController = navHostController,
@@ -73,10 +78,15 @@ fun NavHostContainer(
                     pinId = it.arguments?.getString("pinId") ?: ""
                 )
             }
-            composable(Routes.SETTINGS.name) {
+            composable(route = Routes.SETTINGS.name,
+                ) {
                 SettingsScreen()
             }
-            composable(Routes.SPLASH.name) {
+            composable(
+                route = Routes.SPLASH.name,
+                enterTransition = { Animations.shortFadeIn },
+                exitTransition = { Animations.fastFadeOut }
+            ) {
                 SplashScreen(
                     navController = navHostController,
                     mainViewModel = hiltViewModel(
@@ -85,20 +95,6 @@ fun NavHostContainer(
                     )
                 )
             }
-        },
-        enterTransition = {
-            fadeIn(
-                animationSpec = tween(AnimationDuration.Short, easing = LinearEasing)
-            ) + slideIntoContainer(
-                towards = AnimatedContentTransitionScope.SlideDirection.Up,
-                animationSpec = tween(durationMillis = AnimationDuration.Medium, easing = EaseIn),
-                initialOffset = { height ->
-                    height / 8
-                }
-            )
-        },
-        exitTransition = {
-            fadeOut(animationSpec = tween(durationMillis = AnimationDuration.Fast, easing = LinearEasing))
         }
     )
 }
