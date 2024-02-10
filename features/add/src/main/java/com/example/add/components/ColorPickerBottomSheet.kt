@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -39,7 +40,9 @@ fun ColorPickerBottomSheet(
     onDismiss: () -> Unit
 ) {
     val controller = rememberColorPickerController()
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+    )
     val coroutineScope = rememberCoroutineScope()
 
     var color by remember(initialColor) {
@@ -48,10 +51,13 @@ fun ColorPickerBottomSheet(
 
 
     ModalBottomSheet(
+        sheetState = sheetState,
         onDismissRequest = onDismiss
     ) {
         Column(
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier
+                .wrapContentHeight()
+                .padding(horizontal = 16.dp),
         ) {
             Text(
                 text = stringResource(id = R.string.color_choose_title),
@@ -61,18 +67,7 @@ fun ColorPickerBottomSheet(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            /*HsvColorPicker(
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .fillMaxWidth(0.5f)
-                    .fillMaxHeight(0.2f)
-                    .padding(16.dp),
-                controller = controller,
-                initialColor = color,
-                onColorChanged = {
-                    color = it.color
-                }
-            )*/
+            VerticalSpacer(height = 16.dp)
 
             ColorPalette(
                 modifier = Modifier.padding(horizontal = 16.dp),
@@ -117,7 +112,7 @@ fun ColorPickerBottomSheet(
                 )
             }
 
-            VerticalSpacer(height = 32.dp)
+            VerticalSpacer(height = 64.dp)
         }
     }
 }

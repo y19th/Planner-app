@@ -144,7 +144,8 @@ fun AddScreen(
                                    ))
                                 },
                             pinTitle = state.taskPins[it].name,
-                            backgroundColor = state.taskPins[it].containerColor
+                            backgroundColor = state.taskPins[it].containerColor,
+                            textColor = state.taskPins[it].textColor
                         )
                     }
                 }

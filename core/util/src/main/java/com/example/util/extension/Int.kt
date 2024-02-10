@@ -6,7 +6,3 @@ fun Int.toColor(): Color {
     return Color(this)
 
 }
-
-fun Long.toColor() : Color {
-    return Color(this)
-}

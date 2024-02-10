@@ -9,6 +9,7 @@ import com.example.domain.models.TaskPin
 import com.example.domain.models.nav.Routes
 import com.example.domain.states.AddState
 import com.example.domain.states.PinState
+import com.example.util.extension.adaptive
 import com.example.util.extension.toColor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -56,7 +57,12 @@ class AddViewModel @Inject constructor() : ViewModel() {
             }
 
             is AddEvents.OnPinColorChange -> {
-                _pinState.update { it.copy(color = event.newValue) }
+                _pinState.update {
+                    it.copy(
+                        backgroundColor = event.newValue,
+                        textColor = Color.adaptive(event.newValue.toColor()).toArgb()
+                    )
+                }
             }
 
             is AddEvents.OnNavigateToPin -> {
@@ -71,7 +77,8 @@ class AddViewModel @Inject constructor() : ViewModel() {
                                 TaskPin(
                                     name = pinState.value.title,
                                     importance = pinState.value.importance,
-                                    containerColor = pinState.value.color.toColor()
+                                    containerColor = pinState.value.backgroundColor.toColor(),
+                                    textColor = pinState.value.textColor.toColor()
                                 )
                             )
                         )
@@ -84,8 +91,9 @@ class AddViewModel @Inject constructor() : ViewModel() {
                 val mappedList = state.value.taskPins.map { pin ->
                     return@map if(pin.id == event.pinId) pin.copy(
                         name = pinState.value.title,
-                        containerColor = pinState.value.color.toColor(),
-                        importance = pinState.value.importance
+                        containerColor = pinState.value.backgroundColor.toColor(),
+                        importance = pinState.value.importance,
+                        textColor = pinState.value.textColor.toColor()
                     ) else pin
                 }
 
@@ -120,7 +128,8 @@ class AddViewModel @Inject constructor() : ViewModel() {
                 it.copy(
                     title = pin.name,
                     importance = pin.importance,
-                    color = pin.containerColor.toArgb()
+                    backgroundColor = pin.containerColor.toArgb(),
+                    textColor = pin.textColor.toArgb()
                 )
             }
         }
@@ -131,7 +140,7 @@ class AddViewModel @Inject constructor() : ViewModel() {
             it.copy(
                 title = "",
                 importance = Importance.Medium,
-                color = Color.Unspecified.toArgb()
+                backgroundColor = Color.Unspecified.toArgb()
             )
         }
     }

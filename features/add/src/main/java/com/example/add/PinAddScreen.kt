@@ -141,7 +141,7 @@ fun PinAddScreen(
                 )
             }
             AnimatedVisibility(
-                visible = state.color != Color.Unspecified.toArgb()
+                visible = state.backgroundColor != Color.Unspecified.toArgb()
             ) {
 
                 VerticalSpacer(height = 4.dp)
@@ -161,7 +161,7 @@ fun PinAddScreen(
                         modifier = Modifier
                             .size(16.dp)
                             .background(
-                                color = state.color.toColor(),
+                                color = state.backgroundColor.toColor(),
                                 shape = RoundedCornerShape(2.dp)
                             )
                     )
@@ -170,7 +170,7 @@ fun PinAddScreen(
         }
 
         RoundedCoveringButton(
-            enabled = state.title.isNotEmpty() && state.color != Color.Unspecified.toArgb(),
+            enabled = state.title.isNotEmpty() && state.backgroundColor != Color.Unspecified.toArgb(),
             onButtonClick = {
                 if(isEditMode) {
                     viewModel.onEvent(AddEvents.OnPinUpdate(

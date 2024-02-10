@@ -1,8 +1,13 @@
 package com.example.domain.models
 
+import android.os.Parcelable
+import androidx.compose.runtime.Immutable
 import com.example.domain.R
+import kotlinx.parcelize.Parcelize
 
-sealed class Importance(val value: Int): Droppable {
+@Parcelize
+@Immutable
+sealed class Importance(val value: Int): Droppable, Parcelable {
 
     companion object {
         fun receiveAll() = listOf(Important,Medium,Low)
