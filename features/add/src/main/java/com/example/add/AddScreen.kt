@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -30,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.add.viewmodels.AddViewModel
+import com.example.components.LabelledDatePicker
 import com.example.components.LabelledTextField
 import com.example.components.LinedDatePicker
 import com.example.components.MainDivider
@@ -40,7 +42,7 @@ import com.example.domain.events.AddEvents
 import com.example.domain.models.TaskPin
 import com.example.ui.R
 
-@OptIn(ExperimentalLayoutApi::class)
+@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun AddScreen(
     navController: NavController,
@@ -54,6 +56,8 @@ fun AddScreen(
             .padding(top = 32.dp, start = 16.dp, end = 16.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
+
+
         Text(
             text = stringResource(id = R.string.add_tasks),
             style = MaterialTheme.typography.displayMedium,
@@ -130,7 +134,7 @@ fun AddScreen(
             }
         }
         
-        LabelledTextField(
+        LabelledDatePicker(
             value = state.taskDate,
             label = stringResource(id = R.string.label_task_date),
             onValueChange = {

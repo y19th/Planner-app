@@ -236,11 +236,3 @@ private fun rememberImportanceItems(): List<Importance> {
         Importance.receiveAll()
     }
 }
-
-private fun Color.notUnspecified(): Color {
-    return if (this != Color.Unspecified) this else Color.White
-}
-
-fun Int.toUColor(): Color {
-    return Color(Color(this).value)
-}

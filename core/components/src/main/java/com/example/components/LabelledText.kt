@@ -3,6 +3,7 @@ package com.example.components
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -12,12 +13,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -26,6 +30,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
@@ -55,6 +61,7 @@ fun LabelledTextField(
     value: String,
     isEnabled: Boolean = true,
     singleLine: Boolean = true,
+    readOnly: Boolean = false,
     isError: Boolean = false,
     shape: RoundedCornerShape = RoundedCornerShape(5.dp),
     onValueChange: (String) -> Unit,
@@ -83,7 +90,6 @@ fun LabelledTextField(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .then(modifier)
     ) {
         Text(
             text = label,
@@ -99,6 +105,7 @@ fun LabelledTextField(
                 .wrapContentHeight()
                 .focusRequester(focusRequester)
                 .onFocusChanged { isFocused = isFocused.not() }
+                .then(modifier)
             ,
             value = value,
             onValueChange = onValueChange,
@@ -106,7 +113,7 @@ fun LabelledTextField(
                 color = colors.focusableTextColor
             ),
             enabled = isEnabled,
-            readOnly = false
+            readOnly = readOnly
         ) { innerTextField ->
             OutlinedTextFieldDefaults.DecorationBox(
                 value = value,
@@ -149,6 +156,158 @@ fun LabelledTextField(
                     }
                 }
             )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun LabelledDatePicker(
+    modifier: Modifier = Modifier,
+    label: String = "label",
+    value: String,
+    isEnabled: Boolean = true,
+    singleLine: Boolean = true,
+    isError: Boolean = false,
+    shape: RoundedCornerShape = RoundedCornerShape(5.dp),
+    onValueChange: (String) -> Unit = {},
+) {
+
+    val interactionSource = remember {
+        MutableInteractionSource()
+    }
+
+    var isExposed by rememberSaveable {
+        mutableStateOf(false)
+    }
+
+    val clickable = Modifier.clickable(
+        interactionSource = interactionSource,
+        indication = LocalIndication.current
+    ) {
+        isExposed = isExposed.not()
+    }
+
+    val datePickerState = rememberDatePickerState(
+        initialSelectedDateMillis = System.currentTimeMillis()
+    )
+
+    val colors = LabelledTextFieldDefaults.DropDown.colors()
+
+    val trailingAnimation by animateFloatAsState(
+        targetValue = if(isExposed) 180f else 0f,
+        label = "trailing animation",
+        animationSpec = tween(durationMillis = AnimationDuration.Medium)
+    )
+
+    val borderColor by animateColorAsState(
+        targetValue = colors.focusableBorderColor.or(isExposed,colors.unfocusableBorderColor),
+        label = "borderColor",
+        animationSpec = tween(durationMillis = AnimationDuration.LessMedium)
+    )
+    val trailingColor by animateColorAsState(
+        targetValue = colors.focusableTrailingColor.or(isExposed, colors.unfocusableTrailingColor),
+        label = "trailingColor",
+        animationSpec = tween(durationMillis = AnimationDuration.LessMedium)
+    )
+
+
+
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+
+        VerticalSpacer(height = 6.dp)
+
+        BasicTextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .then(modifier),
+            value = value,
+            onValueChange = onValueChange,
+            textStyle = MaterialTheme.typography.bodySmall.copy(
+                color = colors.focusableTextColor
+            ),
+            enabled = isEnabled,
+            readOnly = true
+        ) { innerTextField ->
+            OutlinedTextFieldDefaults.DecorationBox(
+                value = value,
+                innerTextField = innerTextField,
+                enabled = isEnabled,
+                isError = isError,
+                singleLine = singleLine,
+                visualTransformation = VisualTransformation.None,
+                interactionSource = interactionSource,
+                contentPadding = PaddingValues(
+                    vertical = 8.dp,
+                    horizontal = 6.dp
+                ),
+                container = {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(
+                                color = MaterialTheme.colorScheme.surfaceVariant,
+                                shape = shape
+                            )
+                            .border(
+                                color = borderColor,
+                                shape = shape,
+                                width = 1.dp
+                            )
+                            .clip(shape)
+                            .then(clickable)
+                    )
+                },
+                trailingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.ArrowDropDown,
+                        contentDescription = null,
+                        tint = trailingColor,
+                        modifier = Modifier.rotate(trailingAnimation)
+                    )
+                }
+            )
+        }
+        if (isExposed) {
+            DatePickerDialog(
+                onDismissRequest = { isExposed = false },
+                confirmButton = {
+                   TextButton(
+                       onClick = {
+                           onValueChange.invoke(
+                               datePickerState.selectedDateMillis.toString()
+                           )
+                           isExposed = false
+                       }
+                   ) {
+                       Text(
+                           text = stringResource(id = R.string.labelled_date_picker_ready),
+                           style = MaterialTheme.typography.labelMedium
+                       )
+                   }
+                }
+            ) {
+
+                DatePicker(
+                    state = datePickerState,
+                    title = {
+                        Text(
+                            text = stringResource(id = R.string.labelled_date_picker_title),
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.padding(start = 24.dp, end = 12.dp, top = 16.dp)
+                        )
+                    }
+                )
+            }
         }
     }
 }
