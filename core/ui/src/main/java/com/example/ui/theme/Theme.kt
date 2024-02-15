@@ -11,6 +11,7 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.Text
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
@@ -84,6 +85,9 @@ fun MainTheme(
 
     val navController = rememberNavController()
 
+
+
+
     val colorScheme = when {
        /* dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
@@ -124,6 +128,9 @@ fun MainTheme(
             containerColor = MaterialTheme.colorScheme.background,
             bottomBar = {
                 MainBottomBar(navController = navController)
+            },
+            snackbarHost = {
+                SnackbarHost(hostState = LocalSnackBarHost.current)
             },
             content = { padding ->
                 content(padding,navController)

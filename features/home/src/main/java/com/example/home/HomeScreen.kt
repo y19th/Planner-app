@@ -1,5 +1,6 @@
 package com.example.home
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,6 +35,8 @@ import com.example.domain.models.TaskPin
 import com.example.home.components.TaskItem
 import com.example.home.viewmodels.MainViewModel
 import com.example.ui.R
+import com.example.ui.theme.LocalSnackBarHost
+import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(
@@ -41,8 +45,11 @@ fun HomeScreen(
 ) {
 
     val state = viewModel.state.collectAsState().value
-
+    val snackbarHost = LocalSnackBarHost.current
+    val coroutineScope = rememberCoroutineScope()
     val filterItems = rememberFilterItems()
+
+
 
     val tasks = listOf(
         TaskModel(
@@ -93,6 +100,13 @@ fun HomeScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 13.dp, bottom = 32.dp)
+                .clickable {
+                    coroutineScope.launch {
+                        snackbarHost.showSnackbar(
+                            message = "snack"
+                        )
+                    }
+                }
             ,
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
