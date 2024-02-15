@@ -8,10 +8,22 @@ data class AddState(
     val taskTitle: String = "",
     val taskPins: List<TaskPin> = listOf(),
     val taskDate: String = "",
-    val taskTimeFrom: String = "",
-    val taskTimeTo: String = "",
+    val taskTimeFrom: TaskTime? = null,
+    val taskTimeTo: TaskTime? = null,
     val taskDescription: String = "",
 
 
     val isValid: Boolean = false
 )
+
+data class TaskTime(
+    val hour: Int = 0,
+    val minute: Int = 0
+) {
+    override fun toString(): String {
+        var time = ""
+        time += if(hour < 10) "0$hour:" else "$hour:"
+        time += if(minute < 10) "0$minute" else minute
+        return time
+    }
+}

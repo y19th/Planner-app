@@ -295,7 +295,6 @@ fun LabelledDatePicker(
                    }
                 }
             ) {
-
                 DatePicker(
                     state = datePickerState,
                     title = {

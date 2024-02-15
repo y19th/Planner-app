@@ -151,11 +151,23 @@ fun AddScreen(
             ){
                 LinedDatePicker(
                     title = stringResource(id = R.string.label_time_from),
-                    value = state.taskTimeFrom
+                    value = state.taskTimeFrom?.toString() ?: "",
+                    onValueChange = { hour,minute ->
+                        viewModel.onEvent(AddEvents.OnTimeFromChange(
+                            newHour = hour,
+                            newMinute = minute
+                        ))
+                    }
                 )
                 LinedDatePicker(
                     title = stringResource(id = R.string.label_time_to),
-                    value = state.taskTimeTo
+                    value = state.taskTimeTo?.toString() ?: "",
+                    onValueChange = { hour,minute ->
+                        viewModel.onEvent(AddEvents.OnTimeToChange(
+                            newHour = hour,
+                            newMinute = minute
+                        ))
+                    }
                 )
             }
         }

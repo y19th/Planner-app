@@ -9,6 +9,7 @@ import com.example.domain.models.TaskPin
 import com.example.domain.models.nav.Routes
 import com.example.domain.states.AddState
 import com.example.domain.states.PinState
+import com.example.domain.states.TaskTime
 import com.example.util.extension.adaptive
 import com.example.util.extension.toColor
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -40,6 +41,20 @@ class AddViewModel @Inject constructor() : ViewModel() {
 
             is AddEvents.OnDateChange -> {
                 _state.update { it.copy(taskDate = event.newDate) }
+                updateValid()
+            }
+
+            is AddEvents.OnTimeFromChange -> {
+                _state.update { it.copy(
+                    taskTimeFrom = TaskTime(hour = event.newHour, minute = event.newMinute)
+                ) }
+                updateValid()
+            }
+
+            is AddEvents.OnTimeToChange -> {
+                _state.update { it.copy(
+                    taskTimeTo = TaskTime(hour = event.newHour, minute = event.newMinute)
+                ) }
                 updateValid()
             }
 
@@ -155,6 +170,7 @@ class AddViewModel @Inject constructor() : ViewModel() {
     private fun checkValidFields(): Boolean {
         with(state.value) {
             return taskTitle.isNotEmpty() && taskDescription.isNotEmpty() && taskDate.isNotEmpty()
+                    && taskTimeFrom != null && taskTimeTo != null
         }
     }
 

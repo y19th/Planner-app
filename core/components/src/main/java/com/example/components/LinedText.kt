@@ -3,11 +3,8 @@ package com.example.components
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,29 +17,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.util.AnimationDuration
 
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true)
-@Composable
-fun PreviewTimePicker() {
-
-    Box(modifier = Modifier.padding(20.dp)) {
-        LinedText(
-            onValueChange = {}
-        )
-    }
-}
 
 
 @Composable
 fun LinedText(
     modifier: Modifier = Modifier,
     text: String = "",
-    onValueChange: (String) -> Unit
+    onValueChange: (Int,Int) -> Unit
 ) {
     var focused by remember {
         mutableStateOf(false)
@@ -61,6 +47,7 @@ fun LinedText(
         text = text,
         style = MaterialTheme.typography.labelSmall,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
+        textAlign = TextAlign.Center,
         modifier = Modifier
             .wrapContentSize(align = Alignment.CenterStart)
             .widthIn(
@@ -89,7 +76,7 @@ fun LinedText(
     if(focused) {
         MainTimePickerDialog(
             onTimeChoose = { hour,minute ->
-                onValueChange.invoke("$hour:$minute")
+                onValueChange.invoke(hour,minute)
             },
             onDismiss = {
                 focused = false

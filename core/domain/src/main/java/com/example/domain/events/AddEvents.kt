@@ -9,6 +9,10 @@ sealed interface AddEvents {
 
     data class OnDateChange(val newDate: String): AddEvents
 
+    data class OnTimeFromChange(val newHour: Int, val newMinute: Int): AddEvents
+
+    data class OnTimeToChange(val newHour: Int, val newMinute: Int): AddEvents
+
     data class OnDescriptionChange(val newDesc: String) : AddEvents
 
     data class OnPinTitleChange(val newValue: String): AddEvents
