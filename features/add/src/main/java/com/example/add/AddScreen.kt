@@ -33,7 +33,7 @@ import androidx.navigation.NavController
 import com.example.add.viewmodels.AddViewModel
 import com.example.components.LabelledDatePicker
 import com.example.components.LabelledTextField
-import com.example.components.LinedDatePicker
+import com.example.components.LinedTimePicker
 import com.example.components.MainDivider
 import com.example.components.Pin
 import com.example.components.RoundedCoveringButton
@@ -149,7 +149,7 @@ fun AddScreen(
                 modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ){
-                LinedDatePicker(
+                LinedTimePicker(
                     title = stringResource(id = R.string.label_time_from),
                     value = state.taskTimeFrom?.toString() ?: "",
                     onValueChange = { hour,minute ->
@@ -159,7 +159,7 @@ fun AddScreen(
                         ))
                     }
                 )
-                LinedDatePicker(
+                LinedTimePicker(
                     title = stringResource(id = R.string.label_time_to),
                     value = state.taskTimeTo?.toString() ?: "",
                     onValueChange = { hour,minute ->
@@ -184,7 +184,9 @@ fun AddScreen(
         )
 
         RoundedCoveringButton(
-            onButtonClick = { /*TODO*/ },
+            onButtonClick = {
+                viewModel.onEvent(AddEvents.OnTaskAdd(navController))
+            },
             enabled = state.isValid
         ) {
             Text(

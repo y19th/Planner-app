@@ -15,6 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.domain.events.MainEvent
 import com.example.domain.models.nav.Routes
 import com.example.home.viewmodels.MainViewModel
 import com.example.ui.R
@@ -25,6 +26,10 @@ fun SplashScreen(
     mainViewModel: MainViewModel = hiltViewModel()
 ) {
     val isLoading = mainViewModel.state.collectAsState().value.isLoading
+
+    LaunchedEffect(null) {
+        mainViewModel.onEvent(MainEvent.OnRefresh)
+    }
 
     Column(
         modifier = Modifier

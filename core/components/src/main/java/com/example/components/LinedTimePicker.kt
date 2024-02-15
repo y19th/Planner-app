@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 
 
 @Composable
-fun LinedDatePicker(
+fun LinedTimePicker(
     modifier: Modifier = Modifier,
     title: String = "from",
     value: String = "",

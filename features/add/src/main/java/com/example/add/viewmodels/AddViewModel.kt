@@ -3,23 +3,29 @@ package com.example.add.viewmodels
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.domain.events.AddEvents
 import com.example.domain.models.Importance
+import com.example.domain.models.TaskModel
 import com.example.domain.models.TaskPin
 import com.example.domain.models.nav.Routes
 import com.example.domain.states.AddState
 import com.example.domain.states.PinState
 import com.example.domain.states.TaskTime
+import com.example.domain.usecase.RoomUseCase
 import com.example.util.extension.adaptive
 import com.example.util.extension.toColor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AddViewModel @Inject constructor() : ViewModel() {
+class AddViewModel @Inject constructor(
+    private val roomUseCase: RoomUseCase
+) : ViewModel() {
 
     companion object {
         const val TAG = "AddViewModel"
@@ -132,6 +138,22 @@ class AddViewModel @Inject constructor() : ViewModel() {
                 }
                 event.navController.navigateUp()
                 pinStateToDefault()
+            }
+            is AddEvents.OnTaskAdd -> {
+                viewModelScope.launch {
+                    roomUseCase.addTask(
+                        TaskModel(
+                            title = state.value.taskTitle,
+                            content = state.value.taskDescription,
+                            dateFrom = state.value.taskTimeFrom ?: TaskTime(),
+                            dateTo = state.value.taskTimeTo ?: TaskTime(),
+                            taskPin = state.value.taskPins
+                        )
+                    )
+                }.invokeOnCompletion {
+                    event.navController.navigateUp()
+                    _state.update { AddState() }
+                }
             }
         }
     }

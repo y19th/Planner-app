@@ -30,4 +30,6 @@ sealed interface AddEvents {
     data class OnPinUpdate(val pinId: String, val navController: NavController): AddEvents
 
     data class OnPinNavigateUp(val navController: NavController): AddEvents
+
+    data class OnTaskAdd(val navController: NavController): AddEvents
 }

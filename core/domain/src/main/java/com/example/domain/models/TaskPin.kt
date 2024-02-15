@@ -24,3 +24,14 @@ fun TaskPinModel.toTaskPin() = TaskPin(
     containerColor = containerColor,
     textColor = textColor
 )
+
+fun TaskPin.toTaskPinModel() = TaskPinModel(
+    name = name,
+    valueImportance = importance.value,
+    containerColor = containerColor,
+    textColor = textColor
+)
+
+fun List<TaskPin>.toListTaskPinModel() = this.map { model -> model.toTaskPinModel() }
+
+fun List<TaskPinModel>.toListTaskPin() = this.map { entity -> entity.toTaskPin() }

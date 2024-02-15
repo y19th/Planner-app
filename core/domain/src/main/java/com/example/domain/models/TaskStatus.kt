@@ -44,3 +44,5 @@ enum class TaskStatus : Parcelable {
     }
 }
 fun TaskStatusModel.toTaskStatus() = TaskStatus.valueOf(this.name)
+
+fun TaskStatus.toTaskStatusModel() = TaskStatusModel.valueOf(this.name)

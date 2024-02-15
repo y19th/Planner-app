@@ -1,6 +1,7 @@
 package com.example.domain.states
 
 import androidx.compose.runtime.Immutable
+import com.example.data.models.TaskTimeModel
 import com.example.domain.models.TaskPin
 
 @Immutable
@@ -27,3 +28,7 @@ data class TaskTime(
         return time
     }
 }
+
+fun TaskTime.toTaskTimeModel() = TaskTimeModel(hour, minute)
+
+fun TaskTimeModel.toTaskTime() = TaskTime(hour, minute)

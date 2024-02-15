@@ -50,8 +50,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.example.util.AnimationDuration
+import com.example.util.DateFormat
 import com.example.util.Droppable
 import com.example.util.extension.or
+import com.example.util.extension.toDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -276,6 +278,7 @@ fun LabelledDatePicker(
                 }
             )
         }
+
         if (isExposed) {
             DatePickerDialog(
                 onDismissRequest = { isExposed = false },
@@ -283,7 +286,9 @@ fun LabelledDatePicker(
                    TextButton(
                        onClick = {
                            onValueChange.invoke(
-                               datePickerState.selectedDateMillis.toString()
+                               datePickerState.selectedDateMillis?.toDate(
+                                   DateFormat.DateWithoutTime
+                               ) ?: ""
                            )
                            isExposed = false
                        }

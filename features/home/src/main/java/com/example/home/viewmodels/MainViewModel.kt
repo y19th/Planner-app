@@ -24,15 +24,6 @@ class MainViewModel @Inject constructor(
     private val _state = MutableStateFlow(MainState())
     val state = _state.asStateFlow()
 
-    init {
-        viewModelScope.launch {
-            _state.update { it.copy(
-                taskList = roomUseCase.receiveTasks(),
-                isLoading = false
-            ) }
-        }
-    }
-
 
     fun onEvent(event: MainEvent) {
         when(event) {
@@ -53,6 +44,14 @@ class MainViewModel @Inject constructor(
                             }
                         }
                     )
+                }
+            }
+            is MainEvent.OnRefresh -> {
+                viewModelScope.launch {
+                    _state.update { it.copy(
+                        taskList = roomUseCase.receiveTasks(),
+                        isLoading = false
+                    ) }
                 }
             }
         }

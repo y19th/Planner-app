@@ -18,20 +18,19 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.components.MainDivider
-import com.example.domain.models.TaskModel
-import com.example.domain.models.TaskPin
+import com.example.domain.events.MainEvent
 import com.example.home.components.TaskItem
 import com.example.home.viewmodels.MainViewModel
 import com.example.ui.R
@@ -49,35 +48,9 @@ fun HomeScreen(
     val coroutineScope = rememberCoroutineScope()
     val filterItems = rememberFilterItems()
 
-
-
-    val tasks = listOf(
-        TaskModel(
-            title = "Убраться в квартире и решить задачи",
-            taskPin = listOf(
-                TaskPin(
-                    name = "важное",
-                    containerColor = MaterialTheme.colorScheme.secondary,
-                    textColor = MaterialTheme.colorScheme.onSecondary
-                ),
-                TaskPin(
-                    name = "домашнее",
-                    containerColor = Color(0xFFFCFF82),
-                    textColor = MaterialTheme.colorScheme.onSecondary
-                ),
-                TaskPin(
-                    name = "уборка",
-                    containerColor = Color(0xFFFF8ADE),
-                    textColor = MaterialTheme.colorScheme.onSecondary
-                ),
-            ),
-            content = "Убираемся в квартире, пылесосим, вытираем пыль, моем посуду и после этого послушать музыку"
-        ),
-        TaskModel(title = "Убраться в квартире и решить задачи"),
-        TaskModel(title = "Убраться в квартире и решить задачи"),
-        TaskModel(title = "Убраться в квартире и решить задачи"),
-        TaskModel(title = "Убраться в квартире и решить задачи")
-    )
+    LaunchedEffect(null) {
+        viewModel.onEvent(MainEvent.OnRefresh)
+    }
 
     Column(
         modifier = modifier
@@ -146,7 +119,7 @@ fun HomeScreen(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(26.dp)
         ) {
-            items(tasks) {
+            items(state.taskList) {
                 TaskItem(
                     model = it,
                     onDoneClick = {

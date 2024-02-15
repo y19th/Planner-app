@@ -4,6 +4,7 @@ import androidx.room.TypeConverter
 import com.example.data.models.PinList
 import com.example.data.models.TaskPinModel
 import com.example.data.models.TaskStatusModel
+import com.example.data.models.TaskTimeModel
 import com.google.gson.Gson
 
 class Converters {
@@ -18,11 +19,25 @@ class Converters {
     }
 
     @TypeConverter
-    fun fromTaskPinModel(value: TaskPinModel): String = value.name
+    fun fromTaskPinModel(value: TaskPinModel): String = Gson().toJson(value)
 
     @TypeConverter
     fun toTaskPinModel(value: String): TaskPinModel =
-        TaskPinModel(name = value)
+        Gson().fromJson(value, TaskPinModel::class.java)
+
+    @TypeConverter
+    fun fromTaskTimeModel(value: TaskTimeModel): Int {
+        return (value.hour * 1000) + value.minute
+    }
+
+    @TypeConverter
+    fun toTaskTimeModel(value: Int): TaskTimeModel {
+        return TaskTimeModel(
+            hour = value / 1000,
+            minute = (value - (value / 1000))
+        )
+    }
+
 
     @TypeConverter
     fun fromTaskPinListToJSON(list: PinList): String = Gson().toJson(list)
