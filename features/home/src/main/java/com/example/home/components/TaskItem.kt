@@ -1,5 +1,6 @@
 package com.example.home.components
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -19,6 +20,7 @@ import com.example.components.MainDivider
 import com.example.components.Pin
 import com.example.components.RoundedCoveringButton
 import com.example.components.VerticalSpacer
+import com.example.domain.events.MainEvent
 import com.example.domain.models.TaskModel
 import com.example.domain.models.TaskStatus
 import com.example.ui.R
@@ -30,12 +32,13 @@ fun TaskItem(
     modifier: Modifier = Modifier,
     model: TaskModel = TaskModel(),
     taskDeadLine: String = "32 минуты",
-    onDoneClick: () -> Unit
+    onEvent: (MainEvent) -> Unit
 ) {
 
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
+            .then(modifier)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -50,10 +53,10 @@ fun TaskItem(
 
             Spacer(modifier = Modifier.weight(0.25f))
 
-            Icon(
-                imageVector = vector(res = R.drawable.ic_task_dots),
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurface
+            TaskIconDropDown(
+                iconRes = R.drawable.ic_task_dots,
+                modelId = model.id,
+                onEvent = onEvent
             )
         }
 
@@ -113,9 +116,11 @@ fun TaskItem(
         
         VerticalSpacer(height = 12.dp)
         
-        if(model.status == TaskStatus.IN_PROGRESS) {
+        AnimatedVisibility(model.status == TaskStatus.IN_PROGRESS) {
             RoundedCoveringButton(
-                onButtonClick = { /*TODO*/ }
+                onButtonClick = {
+                    onEvent.invoke(MainEvent.OnTaskDone(taskId = model.id))
+                }
             ) {
                 Text(
                     text = stringResource(id = R.string.done),

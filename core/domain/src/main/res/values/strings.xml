@@ -17,4 +17,8 @@
     <string name="importance_important">Важное</string>
     <string name="importance_medium">Среднее</string>
     <string name="importance_low">Неважное</string>
+
+    <string name="filter_by_name">По названию</string>
+    <string name="filter_by_importance">По важности</string>
+    <string name="filter_by_deadline">По оставшемуся времени</string>
 </resources>

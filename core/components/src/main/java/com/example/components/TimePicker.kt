@@ -3,6 +3,7 @@ package com.example.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -14,6 +15,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 
@@ -23,6 +26,7 @@ import androidx.compose.ui.window.Dialog
 fun MainTimePickerDialog(
     initHour: Int = 12,
     initMinute: Int = 0,
+    dialogTitle: String = "Dialog title",
     onTimeChoose: (Int,Int) -> Unit,
     onDismiss: () -> Unit
 ) {
@@ -48,6 +52,15 @@ fun MainTimePickerDialog(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
+            Text(
+                text = dialogTitle,
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+
+            VerticalSpacer(height = 16.dp)
+
             TimePicker(
                 state = state
             )

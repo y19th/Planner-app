@@ -1,4 +1,4 @@
-package com.example.domain.models
+package com.example.domain.models.droppable
 
 import android.os.Parcelable
 import androidx.compose.runtime.Immutable
@@ -11,7 +11,7 @@ import kotlinx.parcelize.Parcelize
 sealed class Importance(val value: Int): Droppable, Parcelable {
 
     companion object {
-        fun receiveAll() = listOf(Important,Medium,Low)
+        fun receiveAll() = listOf(Important, Medium, Low)
 
         fun findByValue(value: Int) = Important.find(value)
     }
@@ -31,10 +31,10 @@ sealed class Importance(val value: Int): Droppable, Parcelable {
     }
 
     override fun find(value: Int): Importance {
-        return when {
-            Important.value == value -> Important
-            Medium.value == value -> Medium
-            Low.value == value -> Low
+        return when(value) {
+            Important.value -> Important
+            Medium.value -> Medium
+            Low.value -> Low
             else -> Medium
         }
     }

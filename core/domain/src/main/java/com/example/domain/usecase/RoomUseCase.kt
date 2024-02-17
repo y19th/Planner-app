@@ -2,6 +2,7 @@ package com.example.domain.usecase
 
 import com.example.data.repository.RoomRepository
 import com.example.domain.models.TaskModel
+import com.example.domain.models.TaskStatus
 import com.example.domain.models.toTaskModel
 import com.example.util.Handler
 import kotlinx.coroutines.CoroutineDispatcher
@@ -25,13 +26,17 @@ class RoomUseCase @Inject constructor(
         taskEntity.forEach { taskEntity -> repository.addTask(taskEntity.toTaskEntity()) }
     }
 
-    suspend fun updateTask(
-        taskId: Int,
-        onUpdate: () -> Unit
+    suspend fun deleteTask(
+        vararg taskModel: TaskModel
     ) = withContext(coreContext) {
-        repository.updateTask(
-            taskId = taskId,
-            onUpdate = onUpdate
-        )
+        taskModel.forEach { taskModel -> repository.deleteTask(taskModel.toTaskEntity()) }
+    }
+
+    suspend fun updateTask(
+        taskModel: TaskModel
+    ) = withContext(coreContext) {
+        repository.updateTask(taskEntity = taskModel.copy(
+            status = TaskStatus.COMPLETED
+        ).toTaskEntity())
     }
 }

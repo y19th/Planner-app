@@ -41,8 +41,9 @@ import com.example.components.VerticalSpacer
 import com.example.domain.events.AddEvents
 import com.example.domain.models.TaskPin
 import com.example.ui.R
+import com.example.ui.theme.LocalSnackBarHost
 
-@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun AddScreen(
     navController: NavController,

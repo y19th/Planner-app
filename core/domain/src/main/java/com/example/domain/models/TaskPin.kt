@@ -3,6 +3,7 @@ package com.example.domain.models
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.Color
 import com.example.data.models.TaskPinModel
+import com.example.domain.models.droppable.Importance
 import java.util.UUID
 
 @Stable

@@ -34,15 +34,14 @@ fun PreviewColorPalette() {
     }
 }
 
-const val ROW_COUNT = 6
-const val COLUMN_COUNT = 7
+private const val ROW_COUNT = 6
+private const val COLUMN_COUNT = 7
 
 @Composable
 fun ColorPalette(
     modifier: Modifier = Modifier,
     onColorChange: (Color) -> Unit
 ) {
-
     var color by remember {
         mutableStateOf(Color.White)
     }

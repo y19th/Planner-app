@@ -20,7 +20,7 @@ interface MainDao {
     fun deleteTask(taskEntity: TaskEntity)
 
     @Update
-    fun updateTaskEntity(taskEntity: TaskEntity)
+    fun updateTask(taskEntity: TaskEntity)
 
     @Query("select * from task where id = :entityId")
     fun findTaskById(entityId: Int) : TaskEntity?

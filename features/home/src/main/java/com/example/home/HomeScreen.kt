@@ -1,6 +1,7 @@
 package com.example.home
 
-import androidx.compose.foundation.clickable
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -29,14 +29,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.components.TextDropDown
 import com.example.components.MainDivider
 import com.example.domain.events.MainEvent
+import com.example.domain.models.droppable.Filter
 import com.example.home.components.TaskItem
 import com.example.home.viewmodels.MainViewModel
 import com.example.ui.R
 import com.example.ui.theme.LocalSnackBarHost
-import kotlinx.coroutines.launch
+import com.example.util.AnimationDuration
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
@@ -73,31 +76,18 @@ fun HomeScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 13.dp, bottom = 32.dp)
-                .clickable {
-                    coroutineScope.launch {
-                        snackbarHost.showSnackbar(
-                            message = "snack"
-                        )
-                    }
-                }
             ,
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = stringResource(id = filterItems.first()),
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                Icon(
-                    imageVector = Icons.Default.ArrowDropDown,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurface
-                )
-            }
+            TextDropDown(
+                value = state.selectedFilter,
+                iconRes = R.drawable.ic_filter_arrow_bottom,
+                dropDownList = filterItems,
+                onDropDownClick = {
+                    viewModel.onEvent(MainEvent.OnTaskFilterChanged(it))
+                }
+            )
             Row (
                 verticalAlignment = Alignment.CenterVertically
             ){
@@ -119,12 +109,16 @@ fun HomeScreen(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(26.dp)
         ) {
-            items(state.taskList) {
+            items(
+                items = state.taskList,
+                key = { it.id }
+            ) {
                 TaskItem(
+                    modifier = Modifier.animateItemPlacement(
+                        animationSpec = tween(AnimationDuration.Fast)
+                    ),
                     model = it,
-                    onDoneClick = {
-
-                    }
+                    onEvent = viewModel::onEvent
                 )
             }
         }
@@ -133,10 +127,8 @@ fun HomeScreen(
 
 @Stable
 @Composable
-fun rememberFilterItems(): List<Int> {
+fun rememberFilterItems(): List<Filter> {
     return rememberSaveable {
-        listOf(
-            R.string.filter_importance
-        )
+        Filter.receiveAll()
     }
 }

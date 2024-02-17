@@ -5,7 +5,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.events.AddEvents
-import com.example.domain.models.Importance
+import com.example.domain.models.droppable.Importance
 import com.example.domain.models.TaskModel
 import com.example.domain.models.TaskPin
 import com.example.domain.models.nav.Routes

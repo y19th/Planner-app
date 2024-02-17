@@ -3,4 +3,6 @@
     <string name="labelled_date_picker_title">Выберите день для задачи</string>
     <string name="labelled_date_picker_ready">Готово</string>
     <string name="labelled_time_picker_ready">Готово</string>
+    <string name="task_delete">Удалить</string>
+    <string name="task_change">Изменить</string>
 </resources>

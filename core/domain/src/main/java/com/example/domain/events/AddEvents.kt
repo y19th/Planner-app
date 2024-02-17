@@ -1,7 +1,7 @@
 package com.example.domain.events
 
 import androidx.navigation.NavController
-import com.example.domain.models.Importance
+import com.example.domain.models.droppable.Importance
 
 sealed interface AddEvents {
 

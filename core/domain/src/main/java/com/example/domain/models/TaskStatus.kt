@@ -7,7 +7,9 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 import com.example.data.models.TaskStatusModel
 import com.example.domain.R
+import com.example.util.extension.onSuccessVariant
 import com.example.util.extension.success
+import com.example.util.extension.successVariant
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -38,7 +40,7 @@ enum class TaskStatus : Parcelable {
                 MaterialTheme.colorScheme.primary
             }
             COMPLETED -> {
-                MaterialTheme.colorScheme.success
+                MaterialTheme.colorScheme.onSuccessVariant
             }
         }
     }

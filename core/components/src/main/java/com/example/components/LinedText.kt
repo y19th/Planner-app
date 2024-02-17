@@ -75,6 +75,7 @@ fun LinedText(
     )
     if(focused) {
         MainTimePickerDialog(
+            dialogTitle = text,
             onTimeChoose = { hour,minute ->
                 onValueChange.invoke(hour,minute)
             },
