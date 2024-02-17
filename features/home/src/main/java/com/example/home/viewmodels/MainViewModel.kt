@@ -1,6 +1,7 @@
 package com.example.home.viewmodels
 
 import android.util.Log
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.events.MainEvent
@@ -9,16 +10,18 @@ import com.example.domain.models.TaskStatus
 import com.example.domain.models.droppable.Filter
 import com.example.domain.states.MainState
 import com.example.domain.usecase.RoomUseCase
+import com.example.home.ElapsedTime
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.math.absoluteValue
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val roomUseCase: RoomUseCase
+    private val roomUseCase: RoomUseCase,
 ) : ViewModel() {
     companion object {
         const val TAG = "MainViewModel"
@@ -84,6 +87,36 @@ class MainViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun calculateDateDiff(model: TaskModel): ElapsedTime {
+
+
+        var diff = model.dateDay + model.dateTo.toMillis() - System.currentTimeMillis()
+
+        val secInMillis = 1000
+        val minInMillis = secInMillis * 60
+        val hourInMillis = minInMillis * 60
+        val dayInMillis = hourInMillis * 24
+
+        val elapsedDays = diff / dayInMillis.absoluteValue
+        diff %= dayInMillis
+
+        val elapsedHours = diff / hourInMillis.absoluteValue
+        diff %= hourInMillis
+
+        val elapsedMinutes = diff / minInMillis.absoluteValue
+        diff %= minInMillis
+
+        val elapsedSeconds = (diff / secInMillis).absoluteValue
+
+        return ElapsedTime(
+            days = elapsedDays,
+            hours = elapsedHours,
+            minute = elapsedMinutes,
+            seconds = elapsedSeconds
+        )
+
     }
 
     private fun sortByFilter(selectedFilter: Filter): List<TaskModel> {

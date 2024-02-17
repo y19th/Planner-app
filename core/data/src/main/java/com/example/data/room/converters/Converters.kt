@@ -27,14 +27,14 @@ class Converters {
 
     @TypeConverter
     fun fromTaskTimeModel(value: TaskTimeModel): Int {
-        return (value.hour * 1000) + value.minute
+        return (value.hour * 100) + value.minute
     }
 
     @TypeConverter
     fun toTaskTimeModel(value: Int): TaskTimeModel {
         return TaskTimeModel(
-            hour = value / 1000,
-            minute = (value - (value / 1000))
+            hour = value / 100,
+            minute = value % 100
         )
     }
 

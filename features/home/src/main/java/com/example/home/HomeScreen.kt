@@ -21,10 +21,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -38,6 +40,7 @@ import com.example.home.viewmodels.MainViewModel
 import com.example.ui.R
 import com.example.ui.theme.LocalSnackBarHost
 import com.example.util.AnimationDuration
+import com.example.util.extension.or
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -118,12 +121,62 @@ fun HomeScreen(
                         animationSpec = tween(AnimationDuration.Fast)
                     ),
                     model = it,
-                    onEvent = viewModel::onEvent
+                    onEvent = viewModel::onEvent,
+                    deadLine = calculateDateDiff(
+                        viewModel.calculateDateDiff(it)
+                    )
                 )
             }
         }
     }
 }
+
+@Composable
+fun calculateDateDiff(elapsedTime: ElapsedTime): String {
+    val strDay = pluralStringResource(
+        id = R.plurals.day,
+        count = elapsedTime.days.toInt(),
+        elapsedTime.days.toInt()
+    ).or(elapsedTime.days != 0L, "")
+
+    val strHour = pluralStringResource(
+        id = R.plurals.hour,
+        count = elapsedTime.hours.toInt(),
+        elapsedTime.hours.toInt()
+    ).or(elapsedTime.hours != 0L, "")
+
+    val strMinute = pluralStringResource(
+        id = R.plurals.minute,
+        count = elapsedTime.minute.toInt(),
+        elapsedTime.minute.toInt()
+    ).or(elapsedTime.minute != 0L, "")
+
+    val strSecond = pluralStringResource(
+        id = R.plurals.second,
+        count = elapsedTime.seconds.toInt(),
+        elapsedTime.seconds.toInt()
+    ).or(elapsedTime.seconds != 0L, "")
+
+    if(strDay.isNotEmpty()) return rememberSaveable(elapsedTime) {
+        "$strDay $strHour"
+    }
+
+    if(strHour.isNotEmpty()) return rememberSaveable(elapsedTime) {
+        "$strHour $strMinute"
+    }
+
+    return rememberSaveable(elapsedTime) {
+        "$strMinute $strSecond"
+    }
+}
+
+
+data class ElapsedTime(
+    val days: Long = 0,
+    val hours: Long = 0,
+    val minute: Long = 0,
+    val seconds: Long = 0
+)
 
 @Stable
 @Composable

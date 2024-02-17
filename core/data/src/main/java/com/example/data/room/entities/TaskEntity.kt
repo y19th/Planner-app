@@ -12,6 +12,7 @@ data class TaskEntity(
     @PrimaryKey(autoGenerate = true) val id: Int,
     @ColumnInfo(name = "title") val title: String = "title",
     @ColumnInfo(name = "content") val content: String = "content",
+    @ColumnInfo(name = "date_day") val dateDay: Long = 0L,
     @ColumnInfo(name = "date_from") val dateFrom: TaskTimeModel = TaskTimeModel(),
     @ColumnInfo(name = "date_to") val dateTo: TaskTimeModel = TaskTimeModel(),
     @ColumnInfo(name = "status") val status: TaskStatusModel = TaskStatusModel.IN_PROGRESS,

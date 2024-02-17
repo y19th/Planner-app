@@ -14,6 +14,7 @@ data class TaskModel(
     val id: Int = 0,
     val title: String = "title",
     val content: String = "content",
+    val dateDay: Long = 0L,
     val dateFrom: TaskTime = TaskTime(),
     val dateTo: TaskTime = TaskTime(),
     val status: TaskStatus = TaskStatus.IN_PROGRESS,
@@ -23,6 +24,7 @@ data class TaskModel(
         id = id,
         title = title,
         content = content,
+        dateDay = dateDay,
         dateFrom = dateFrom.toTaskTimeModel(),
         dateTo = dateTo.toTaskTimeModel(),
         status = status.toTaskStatusModel(),
@@ -31,11 +33,12 @@ data class TaskModel(
 }
 
 fun TaskEntity.toTaskModel() = TaskModel(
-    id,
-    title,
-    content,
-    dateFrom.toTaskTime(),
-    dateTo.toTaskTime(),
-    status.toTaskStatus(),
-    taskPin.list.toListTaskPin()
+    id = id,
+    title = title,
+    content = content,
+    dateDay = dateDay,
+    dateFrom = dateFrom.toTaskTime(),
+    dateTo = dateTo.toTaskTime(),
+    status = status.toTaskStatus(),
+    taskPin = taskPin.list.toListTaskPin()
 )

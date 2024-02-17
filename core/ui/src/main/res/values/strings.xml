@@ -59,4 +59,36 @@
     <string name="color_brightness">Яркость цвета</string>
     <string name="pin_example">Очень важное</string>
     <string name="pin_now">Текущие бирки:</string>
+
+    <plurals name="day">
+        <item quantity="zero">ни одного дня</item>
+        <item quantity="one">%1$d день</item>
+        <item quantity="few">%1$d дня</item>
+        <item quantity="many">%1$d дней</item>
+        <item quantity="other">%1$d дней</item>
+    </plurals>
+
+    <plurals name="hour">
+        <item quantity="zero">ни одного часа</item>
+        <item quantity="one">%1$d час</item>
+        <item quantity="few">%1$d часа</item>
+        <item quantity="many">%1$d часов</item>
+        <item quantity="other">%1$d часов</item>
+    </plurals>
+
+    <plurals name="minute">
+        <item quantity="zero">ни одной минуты</item>
+        <item quantity="one">%1$d минута</item>
+        <item quantity="few">%1$d минуты</item>
+        <item quantity="many">%1$d минут</item>
+        <item quantity="other">%1$d минут</item>
+    </plurals>
+
+    <plurals name="second">
+        <item quantity="zero">ни одной секунды</item>
+        <item quantity="one">%1$d секунда</item>
+        <item quantity="few">%1$d секунды</item>
+        <item quantity="many">%1$d секунд</item>
+        <item quantity="other">%1$d секунд</item>
+    </plurals>
 </resources>

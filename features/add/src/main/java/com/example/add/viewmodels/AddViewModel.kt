@@ -145,6 +145,7 @@ class AddViewModel @Inject constructor(
                         TaskModel(
                             title = state.value.taskTitle,
                             content = state.value.taskDescription,
+                            dateDay = state.value.taskDate,
                             dateFrom = state.value.taskTimeFrom ?: TaskTime(),
                             dateTo = state.value.taskTimeTo ?: TaskTime(),
                             taskPin = state.value.taskPins
@@ -191,7 +192,7 @@ class AddViewModel @Inject constructor(
 
     private fun checkValidFields(): Boolean {
         with(state.value) {
-            return taskTitle.isNotEmpty() && taskDescription.isNotEmpty() && taskDate.isNotEmpty()
+            return taskTitle.isNotEmpty() && taskDescription.isNotEmpty() && taskDate != 0L
                     && taskTimeFrom != null && taskTimeTo != null
         }
     }

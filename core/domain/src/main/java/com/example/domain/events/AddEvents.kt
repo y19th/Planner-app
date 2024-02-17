@@ -7,7 +7,7 @@ sealed interface AddEvents {
 
     data class OnTaskTitleChange(val newValue: String) : AddEvents
 
-    data class OnDateChange(val newDate: String): AddEvents
+    data class OnDateChange(val newDate: Long): AddEvents
 
     data class OnTimeFromChange(val newHour: Int, val newMinute: Int): AddEvents
 

@@ -8,7 +8,7 @@ import com.example.domain.models.TaskPin
 data class AddState(
     val taskTitle: String = "",
     val taskPins: List<TaskPin> = listOf(),
-    val taskDate: String = "",
+    val taskDate: Long = 0L,
     val taskTimeFrom: TaskTime? = null,
     val taskTimeTo: TaskTime? = null,
     val taskDescription: String = "",
@@ -26,6 +26,10 @@ data class TaskTime(
         time += if(hour < 10) "0$hour:" else "$hour:"
         time += if(minute < 10) "0$minute" else minute
         return time
+    }
+
+    fun toMillis(): Long {
+        return (hour * 3600L + minute * 60L) * 1000L
     }
 }
 

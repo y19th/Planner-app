@@ -31,7 +31,7 @@ import com.example.util.extension.vector
 fun TaskItem(
     modifier: Modifier = Modifier,
     model: TaskModel = TaskModel(),
-    taskDeadLine: String = "32 минуты",
+    deadLine: String = "32 минуты",
     onEvent: (MainEvent) -> Unit
 ) {
 
@@ -83,7 +83,7 @@ fun TaskItem(
                 color = MaterialTheme.colorScheme.outline
             )
             Text(
-                text = taskDeadLine,
+                text = deadLine,
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.outline
             )

@@ -173,6 +173,7 @@ fun LabelledDatePicker(
     isError: Boolean = false,
     shape: RoundedCornerShape = RoundedCornerShape(5.dp),
     onValueChange: (String) -> Unit = {},
+    onDatePicked: (Long) -> Unit = {}
 ) {
 
     val interactionSource = remember {
@@ -285,11 +286,7 @@ fun LabelledDatePicker(
                 confirmButton = {
                    TextButton(
                        onClick = {
-                           onValueChange.invoke(
-                               datePickerState.selectedDateMillis?.toDate(
-                                   DateFormat.DateWithoutTime
-                               ) ?: ""
-                           )
+                           onDatePicked.invoke(datePickerState.selectedDateMillis ?: 0L)
                            isExposed = false
                        }
                    ) {

@@ -42,6 +42,8 @@ import com.example.domain.events.AddEvents
 import com.example.domain.models.TaskPin
 import com.example.ui.R
 import com.example.ui.theme.LocalSnackBarHost
+import com.example.util.DateFormat
+import com.example.util.extension.toDate
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -134,17 +136,18 @@ fun AddScreen(
                 }
             }
         }
-        
+
         LabelledDatePicker(
-            value = state.taskDate,
+            value = if(state.taskDate != 0L)
+                state.taskDate.toDate(DateFormat.DateWithoutTime) else "",
             label = stringResource(id = R.string.label_task_date),
-            onValueChange = {
+            onDatePicked = {
                 viewModel.onEvent(AddEvents.OnDateChange(newDate = it))
-            } 
+            }
         )
 
         AnimatedVisibility(
-            visible = state.taskDate.isNotEmpty()
+            visible = state.taskDate != 0L
         ) {
             Column (
                 modifier = Modifier.fillMaxWidth(),
