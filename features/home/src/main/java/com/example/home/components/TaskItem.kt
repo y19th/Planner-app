@@ -32,7 +32,8 @@ fun TaskItem(
     modifier: Modifier = Modifier,
     model: TaskModel = TaskModel(),
     deadLine: String = "32 минуты",
-    onEvent: (MainEvent) -> Unit
+    onEvent: (MainEvent) -> Unit,
+    onChangeTaskEvent: () -> Unit
 ) {
 
     Column(
@@ -56,7 +57,8 @@ fun TaskItem(
             TaskIconDropDown(
                 iconRes = R.drawable.ic_task_dots,
                 modelId = model.id,
-                onEvent = onEvent
+                onEvent = onEvent,
+                onChangeTaskEvent = onChangeTaskEvent
             )
         }
 

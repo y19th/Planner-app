@@ -21,7 +21,7 @@ sealed interface AddEvents {
 
     data class OnPinColorChange(val newValue: Int): AddEvents
 
-    data class OnNavigateToPin(val pinId: String, val navController: NavController) : AddEvents
+    data class OnNavigateToPin(val pinId: String, val navController: NavController, val taskId: Int) : AddEvents
 
     data class OnPinAddition(val navController: NavController): AddEvents
 
@@ -32,4 +32,8 @@ sealed interface AddEvents {
     data class OnPinNavigateUp(val navController: NavController): AddEvents
 
     data class OnTaskAdd(val navController: NavController): AddEvents
+
+    data class OnTaskEdit(val taskId: Int): AddEvents
+
+    data class OnEndTaskEdit(val navController: NavController, val taskId: Int) : AddEvents
 }

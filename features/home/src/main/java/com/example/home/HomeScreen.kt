@@ -31,9 +31,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.example.components.TextDropDown
 import com.example.components.MainDivider
 import com.example.domain.events.MainEvent
+import com.example.domain.models.ElapsedTime
 import com.example.domain.models.droppable.Filter
 import com.example.home.components.TaskItem
 import com.example.home.viewmodels.MainViewModel
@@ -46,7 +48,8 @@ import com.example.util.extension.or
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    viewModel: MainViewModel = hiltViewModel()
+    viewModel: MainViewModel = hiltViewModel(),
+    navController: NavController
 ) {
 
     val state = viewModel.state.collectAsState().value
@@ -124,7 +127,13 @@ fun HomeScreen(
                     onEvent = viewModel::onEvent,
                     deadLine = calculateDateDiff(
                         viewModel.calculateDateDiff(it)
-                    )
+                    ),
+                    onChangeTaskEvent = {
+                        viewModel.onEvent(MainEvent.OnTaskChange(
+                            navController = navController,
+                            taskId = it.id
+                        ))
+                    }
                 )
             }
         }
@@ -170,13 +179,6 @@ fun calculateDateDiff(elapsedTime: ElapsedTime): String {
     }
 }
 
-
-data class ElapsedTime(
-    val days: Long = 0,
-    val hours: Long = 0,
-    val minute: Long = 0,
-    val seconds: Long = 0
-)
 
 @Stable
 @Composable

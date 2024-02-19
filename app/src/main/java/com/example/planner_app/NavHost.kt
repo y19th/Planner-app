@@ -14,6 +14,7 @@ import androidx.navigation.navArgument
 import com.example.add.AddScreen
 import com.example.add.PinAddScreen
 import com.example.add.viewmodels.AddViewModel
+import com.example.domain.models.TaskModel
 import com.example.domain.models.nav.Routes
 import com.example.home.HomeScreen
 import com.example.home.viewmodels.MainViewModel
@@ -43,12 +44,32 @@ fun NavHostContainer(
                 popEnterTransition = { Animations.mediumFadeIn }
             ) {
                 HomeScreen(
+                    navController = navHostController,
                     viewModel = hiltViewModel(
                         viewModelStoreOwner = viewModelStoreOwner,
                         key = MainViewModel.TAG
                     )
                 )
             }
+
+            composable(
+                route = Routes.HOME.routeWith("{taskId}"),
+                arguments = listOf(navArgument("taskId") { type = NavType.IntType}),
+                enterTransition = { Animations.slideInWithFadeFromRight },
+                exitTransition = { Animations.slideOutWithFadeToRight }
+            ) {
+                val taskId = it.arguments?.getInt("taskId")
+
+                AddScreen(
+                    navController = navHostController,
+                    viewModel = hiltViewModel(
+                        viewModelStoreOwner = viewModelStoreOwner,
+                        key = taskId?.let { id -> AddViewModel.TAG + "/$id" } ?: AddViewModel.TAG
+                    ),
+                    taskId = taskId
+                )
+            }
+
             composable(
                 route = Routes.ADD.name,
                 enterTransition = { Animations.slideInWithFadeFromBottom },
@@ -64,16 +85,22 @@ fun NavHostContainer(
                 )
             }
             composable(
-                route = Routes.ADD.routeWith("{pinId}"),
-                arguments = listOf(navArgument("pinId") { type = NavType.StringType}),
+                route = Routes.ADD.routeWith("{pinId}|{taskId}"),
+                arguments = listOf(
+                    navArgument("pinId") { type = NavType.StringType},
+                    navArgument("taskId") { type = NavType.IntType }
+                ),
                 enterTransition = { Animations.slideInWithFadeFromRight },
                 exitTransition = { Animations.slideOutWithFadeToRight }
             ) {
+
+                val taskId = it.arguments?.getInt("taskId").takeIf { id -> id != TaskModel.DefaultId }
+
                 PinAddScreen(
                     navController = navHostController,
                     viewModel = hiltViewModel(
                         viewModelStoreOwner = viewModelStoreOwner,
-                        key = AddViewModel.TAG
+                        key = taskId?.let { id -> AddViewModel.TAG + "/$id" } ?: AddViewModel.TAG
                     ),
                     pinId = it.arguments?.getString("pinId") ?: ""
                 )

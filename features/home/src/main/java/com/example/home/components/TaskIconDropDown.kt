@@ -26,7 +26,8 @@ import com.example.util.extension.vector
 fun TaskIconDropDown(
     @DrawableRes iconRes: Int,
     modelId: Int,
-    onEvent: (MainEvent) -> Unit
+    onEvent: (MainEvent) -> Unit,
+    onChangeTaskEvent: () -> Unit
 ) {
     var expanded by rememberSaveable {
         mutableStateOf(false)
@@ -55,7 +56,7 @@ fun TaskIconDropDown(
                     )
                 },
                 onClick = {
-                    onEvent.invoke(MainEvent.OnTaskChange(taskId = modelId))
+                    onChangeTaskEvent.invoke()
                     expanded = false
                 }
             )

@@ -32,11 +32,24 @@ class RoomUseCase @Inject constructor(
         taskModel.forEach { taskModel -> repository.deleteTask(taskModel.toTaskEntity()) }
     }
 
-    suspend fun updateTask(
+    suspend fun updateTaskStatus(
         taskModel: TaskModel
     ) = withContext(coreContext) {
         repository.updateTask(taskEntity = taskModel.copy(
             status = TaskStatus.COMPLETED
         ).toTaskEntity())
+    }
+
+
+    suspend fun updateTask(
+        taskModel: TaskModel,
+    ) = withContext(coreContext) {
+        repository.updateTask(taskModel.toTaskEntity())
+    }
+
+    suspend fun receiveTaskById(
+        taskId: Int
+    ) = withContext(coreContext) {
+        repository.receiveTaskById(entityId = taskId)?.toTaskModel()
     }
 }

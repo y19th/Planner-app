@@ -20,8 +20,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,10 +38,12 @@ import com.example.components.LabelledDatePicker
 import com.example.components.LabelledTextField
 import com.example.components.LinedTimePicker
 import com.example.components.MainDivider
+import com.example.components.MainTopBar
 import com.example.components.Pin
 import com.example.components.RoundedCoveringButton
 import com.example.components.VerticalSpacer
 import com.example.domain.events.AddEvents
+import com.example.domain.models.TaskModel
 import com.example.domain.models.TaskPin
 import com.example.ui.R
 import com.example.ui.theme.LocalSnackBarHost
@@ -49,9 +54,20 @@ import com.example.util.extension.toDate
 @Composable
 fun AddScreen(
     navController: NavController,
-    viewModel: AddViewModel = hiltViewModel()
+    viewModel: AddViewModel = hiltViewModel(),
+    taskId: Int? = null
 ) {
     val state by viewModel.state.collectAsState()
+
+    val inEditMode by rememberSaveable(taskId) {
+        mutableStateOf(taskId != null)
+    }
+
+    LaunchedEffect(taskId) {
+        if(taskId != null && state.isUpdated.not()) {
+            viewModel.onEvent(AddEvents.OnTaskEdit(taskId))
+        }
+    }
     
     Column(
         modifier = Modifier
@@ -60,16 +76,13 @@ fun AddScreen(
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
 
-
-        Text(
-            text = stringResource(id = R.string.add_tasks),
-            style = MaterialTheme.typography.displayMedium,
-            color = MaterialTheme.colorScheme.onSurface,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth()
+        MainTopBar(
+            title = stringResource(
+                id = if(inEditMode) R.string.edit_pin else R.string.add_tasks
+            ),
+            isWithPopBack = inEditMode,
+            onPopBack = { navController.navigateUp() }
         )
-
-        MainDivider()
 
         LabelledTextField(
             value = state.taskTitle,
@@ -88,6 +101,7 @@ fun AddScreen(
                     viewModel.onEvent(
                         AddEvents.OnNavigateToPin(
                             pinId = TaskPin.DefaultId,
+                            taskId = taskId ?: TaskModel.DefaultId,
                             navController = navController
                         )
                     )
@@ -125,6 +139,7 @@ fun AddScreen(
                                 .clickable {
                                    viewModel.onEvent(AddEvents.OnNavigateToPin(
                                        pinId = state.taskPins[it].id,
+                                       taskId = taskId ?: TaskModel.DefaultId,
                                        navController = navController
                                    ))
                                 },
@@ -189,12 +204,16 @@ fun AddScreen(
 
         RoundedCoveringButton(
             onButtonClick = {
-                viewModel.onEvent(AddEvents.OnTaskAdd(navController))
+                viewModel.onEvent(
+                    if (inEditMode) AddEvents.OnEndTaskEdit(navController,taskId ?: -1)
+                    else AddEvents.OnTaskAdd(navController)
+                )
             },
             enabled = state.isValid
         ) {
             Text(
-                text = stringResource(id = R.string.add_task),
+                text = stringResource(id =
+                if(inEditMode) R.string.on_end_edit_task else R.string.add_task),
                 style = MaterialTheme.typography.titleSmall
             )
         }

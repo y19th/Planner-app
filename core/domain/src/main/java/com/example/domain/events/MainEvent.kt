@@ -1,5 +1,6 @@
 package com.example.domain.events
 
+import androidx.navigation.NavController
 import com.example.domain.models.droppable.Filter
 
 sealed interface MainEvent {
@@ -8,7 +9,7 @@ sealed interface MainEvent {
 
     data class OnTaskDone(val taskId: Int) : MainEvent
 
-    data class OnTaskChange(val taskId: Int): MainEvent
+    data class OnTaskChange(val navController: NavController,val taskId: Int): MainEvent
 
     data class OnTaskDelete(val taskId: Int): MainEvent
 

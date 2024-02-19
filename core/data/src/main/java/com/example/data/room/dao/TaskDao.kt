@@ -8,7 +8,7 @@ import androidx.room.Update
 import com.example.data.room.entities.TaskEntity
 
 @Dao
-interface MainDao {
+interface TaskDao {
 
     @Query("select * from task")
     fun getTasks() : List<TaskEntity>

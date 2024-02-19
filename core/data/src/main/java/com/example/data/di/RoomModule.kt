@@ -2,7 +2,7 @@ package com.example.data.di
 
 import android.content.Context
 import com.example.data.repository.RoomRepository
-import com.example.data.room.dao.MainDao
+import com.example.data.room.dao.TaskDao
 import com.example.data.room.schema.MainSchema
 import dagger.Module
 import dagger.Provides
@@ -21,13 +21,13 @@ object RoomModule {
     }
 
     @Provides
-    fun provideMainDao(mainSchema: MainSchema): MainDao {
+    fun provideMainDao(mainSchema: MainSchema): TaskDao {
         return mainSchema.MainDao()
     }
 
     @Provides
-    fun provideRoomRepository(mainDao: MainDao): RoomRepository {
-        return RoomRepository(taskDao = mainDao)
+    fun provideRoomRepository(taskDao: TaskDao): RoomRepository {
+        return RoomRepository(taskDao = taskDao)
     }
 }
 

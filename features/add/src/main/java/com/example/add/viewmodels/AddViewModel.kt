@@ -9,9 +9,11 @@ import com.example.domain.models.droppable.Importance
 import com.example.domain.models.TaskModel
 import com.example.domain.models.TaskPin
 import com.example.domain.models.nav.Routes
+import com.example.domain.models.toListTaskPin
 import com.example.domain.states.AddState
 import com.example.domain.states.PinState
 import com.example.domain.states.TaskTime
+import com.example.domain.states.toTaskTime
 import com.example.domain.usecase.RoomUseCase
 import com.example.util.extension.adaptive
 import com.example.util.extension.toColor
@@ -87,7 +89,9 @@ class AddViewModel @Inject constructor(
             }
 
             is AddEvents.OnNavigateToPin -> {
-                event.navController.navigate(Routes.ADD.routeWith(event.pinId))
+                event.navController.navigate(
+                    route = Routes.ADD.routeWith("${event.pinId}|${event.taskId}")
+                )
             }
 
             is AddEvents.OnPinAddition -> {
@@ -154,6 +158,41 @@ class AddViewModel @Inject constructor(
                 }.invokeOnCompletion {
                     event.navController.navigateUp()
                     _state.update { AddState() }
+                }
+            }
+            is AddEvents.OnTaskEdit -> {
+                viewModelScope.launch {
+                    roomUseCase.receiveTaskById(event.taskId)?.let { task ->
+                        _state.update {
+                            it.copy(
+                                taskTitle = task.title,
+                                taskDate = task.dateDay,
+                                taskTimeTo = task.dateTo,
+                                taskTimeFrom = task.dateFrom,
+                                taskDescription = task.content,
+                                taskPins = task.taskPin,
+                                isUpdated = true
+                            )
+                        }
+                        updateValid()
+                    }
+                }
+            }
+            is AddEvents.OnEndTaskEdit -> {
+                viewModelScope.launch {
+                    roomUseCase.updateTask(
+                        TaskModel(
+                            id = event.taskId,
+                            title = state.value.taskTitle,
+                            content = state.value.taskDescription,
+                            dateDay = state.value.taskDate,
+                            dateFrom = state.value.taskTimeFrom ?: TaskTime(),
+                            dateTo = state.value.taskTimeTo ?: TaskTime(),
+                            taskPin = state.value.taskPins
+                        )
+                    )
+                }.invokeOnCompletion {
+                    event.navController.navigateUp()
                 }
             }
         }

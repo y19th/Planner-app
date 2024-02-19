@@ -14,7 +14,8 @@ data class AddState(
     val taskDescription: String = "",
 
 
-    val isValid: Boolean = false
+    val isValid: Boolean = false,
+    val isUpdated: Boolean = false
 )
 
 data class TaskTime(

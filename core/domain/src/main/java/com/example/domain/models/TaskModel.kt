@@ -20,6 +20,11 @@ data class TaskModel(
     val status: TaskStatus = TaskStatus.IN_PROGRESS,
     val taskPin: List<TaskPin> = listOf()
 ) {
+    companion object {
+        const val DefaultId = -10
+    }
+
+
     fun toTaskEntity() = TaskEntity(
         id = id,
         title = title,

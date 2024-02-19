@@ -1,23 +1,21 @@
 package com.example.home.viewmodels
 
-import android.util.Log
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.events.MainEvent
+import com.example.domain.models.ElapsedTime
 import com.example.domain.models.TaskModel
 import com.example.domain.models.TaskStatus
 import com.example.domain.models.droppable.Filter
+import com.example.domain.models.nav.Routes
 import com.example.domain.states.MainState
 import com.example.domain.usecase.RoomUseCase
-import com.example.home.ElapsedTime
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.math.absoluteValue
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -38,7 +36,7 @@ class MainViewModel @Inject constructor(
                     state.value.taskList.find {model ->
                         model.id == event.taskId
                     }?.let { foundModel ->
-                        roomUseCase.updateTask(foundModel)
+                        roomUseCase.updateTaskStatus(foundModel)
                         _state.update {
                             it.copy(
                                 taskList = state.value.taskList.map { model ->
@@ -60,7 +58,9 @@ class MainViewModel @Inject constructor(
                 }
             }
             is MainEvent.OnTaskChange -> {
-
+                event.navController.navigate(
+                    Routes.HOME.routeWith(event.taskId.toString())
+                )
             }
             is MainEvent.OnTaskDelete -> {
                 viewModelScope.launch {
@@ -99,16 +99,16 @@ class MainViewModel @Inject constructor(
         val hourInMillis = minInMillis * 60
         val dayInMillis = hourInMillis * 24
 
-        val elapsedDays = diff / dayInMillis.absoluteValue
+        val elapsedDays = diff / dayInMillis
         diff %= dayInMillis
 
-        val elapsedHours = diff / hourInMillis.absoluteValue
+        val elapsedHours = diff / hourInMillis
         diff %= hourInMillis
 
-        val elapsedMinutes = diff / minInMillis.absoluteValue
+        val elapsedMinutes = diff / minInMillis
         diff %= minInMillis
 
-        val elapsedSeconds = (diff / secInMillis).absoluteValue
+        val elapsedSeconds = (diff / secInMillis)
 
         return ElapsedTime(
             days = elapsedDays,

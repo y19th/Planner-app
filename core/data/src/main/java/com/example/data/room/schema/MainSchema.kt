@@ -6,13 +6,13 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.data.room.converters.Converters
-import com.example.data.room.dao.MainDao
+import com.example.data.room.dao.TaskDao
 import com.example.data.room.entities.TaskEntity
 
 @Database(entities = [TaskEntity::class], version = 1)
 @TypeConverters(Converters::class)
 abstract class MainSchema: RoomDatabase() {
-    abstract fun MainDao() : MainDao
+    abstract fun MainDao() : TaskDao
 
     companion object {
         @Volatile
