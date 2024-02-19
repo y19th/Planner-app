@@ -36,6 +36,7 @@
     <string name="deadline">осталось: </string>
     <string name="done">Сделано</string>
     <string name="daily_planner">Задачи на день</string>
+    <string name="screen_settings">Настройки</string>
     <string name="add_tasks">Добавить новую задачу</string>
     <string name="edit_task">Изменить задачу</string>
     <string name="on_end_edit_task">Сохранить изменения</string>
@@ -61,6 +62,13 @@
     <string name="color_brightness">Яркость цвета</string>
     <string name="pin_example">Очень важное</string>
     <string name="pin_now">Текущие бирки:</string>
+    <string name="label_settings_theme">Тема приложения</string>
+    <string name="label_settings_cache">Локальный кэш приложения</string>
+    <string name="label_settings_cache_desc">Здесь можно очистить память, занимаемую приложением для хранения ваших задач</string>
+    <string name="label_settings_cache_clear">Очистить память</string>
+    <string name="label_settings_tasks_for_year">Записи задач по годам</string>
+    <string name="label_settings_tasks_all">Всего записей:</string>
+    <string name="label_settings_tasks_this_year">За этот год:</string>
 
     <plurals name="day">
         <item quantity="zero">ни одного дня</item>

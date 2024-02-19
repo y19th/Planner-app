@@ -34,6 +34,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.domain.models.nav.Destinations
 import com.example.domain.models.nav.Routes
+import com.example.ui.theme.local.LocalSnackBarHost
 import com.example.util.extension.contains
 import com.example.util.extension.onSuccess
 import com.example.util.extension.onSuccessVariant

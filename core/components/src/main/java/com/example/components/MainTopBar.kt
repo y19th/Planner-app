@@ -2,6 +2,7 @@ package com.example.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
@@ -18,49 +19,46 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewMainTopBar() {
-    Box(modifier = Modifier.padding(20.dp)) {
-        MainTopBar(
-            title = "Top bar",
-            onPopBack =  {},
-            isWithPopBack = true
-        )
-    }
-}
-
 
 @Composable
 fun MainTopBar(
+    modifier: Modifier = Modifier,
     title: String,
     isWithPopBack: Boolean = false,
-    onPopBack: () -> Unit
+    onPopBack: () -> Unit = {}
 ) {
-    Box(modifier = Modifier.fillMaxWidth()) {
+    Column {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .then(modifier)
+        ) {
 
-        if(isWithPopBack) {
-            Icon(
-                imageVector = Icons.AutoMirrored.Default.KeyboardArrowLeft,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .clip(CircleShape)
-                    .clickable {
-                        onPopBack.invoke()
-                    }
+            if (isWithPopBack) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Default.KeyboardArrowLeft,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier
+                        .align(Alignment.CenterStart)
+                        .clip(CircleShape)
+                        .clickable {
+                            onPopBack.invoke()
+                        }
+                )
+            }
+
+            Text(
+                text = title,
+                style = MaterialTheme.typography.displayMedium,
+                color = MaterialTheme.colorScheme.onSurface,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
             )
         }
 
-        Text(
-            text = title,
-            style = MaterialTheme.typography.displayMedium,
-            color = MaterialTheme.colorScheme.onSurface,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth()
-        )
-    }
+        VerticalSpacer(height = 20.dp)
 
-    MainDivider()
+        MainDivider()
+    }
 }

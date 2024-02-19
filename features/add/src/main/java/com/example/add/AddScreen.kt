@@ -10,12 +10,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -29,7 +29,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -37,7 +36,6 @@ import com.example.add.viewmodels.AddViewModel
 import com.example.components.LabelledDatePicker
 import com.example.components.LabelledTextField
 import com.example.components.LinedTimePicker
-import com.example.components.MainDivider
 import com.example.components.MainTopBar
 import com.example.components.Pin
 import com.example.components.RoundedCoveringButton
@@ -46,7 +44,6 @@ import com.example.domain.events.AddEvents
 import com.example.domain.models.TaskModel
 import com.example.domain.models.TaskPin
 import com.example.ui.R
-import com.example.ui.theme.LocalSnackBarHost
 import com.example.util.DateFormat
 import com.example.util.extension.toDate
 

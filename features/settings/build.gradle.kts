@@ -1,6 +1,8 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("com.google.devtools.ksp")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -41,8 +43,19 @@ android {
 
 dependencies {
 
+
+    val daggerVersion = "2.48"
+
     implementation(project(":core:ui"))
+    implementation(project(":core:domain"))
     implementation(project(":core:components"))
+    implementation(project(":core:util"))
+
+
+    //hilt
+    implementation ("com.google.dagger:hilt-android:$daggerVersion")
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
+    ksp ("com.google.dagger:hilt-compiler:$daggerVersion")
 
     implementation("androidx.compose.material3:material3:1.1.2")
     implementation("androidx.core:core-ktx:1.12.0")

@@ -1,6 +1,7 @@
 package com.example.home.components
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.shape.CircleShape
@@ -18,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import com.example.components.R
-import com.example.domain.events.AddEvents
 import com.example.domain.events.MainEvent
 import com.example.util.extension.vector
 
@@ -45,6 +45,7 @@ fun TaskIconDropDown(
         )
 
         DropdownMenu(
+            modifier = Modifier.background(color = MaterialTheme.colorScheme.surface),
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {

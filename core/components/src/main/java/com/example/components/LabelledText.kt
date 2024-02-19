@@ -422,6 +422,7 @@ fun <T : Droppable> LabelledTextDropDown(
                 )
             }
             ExposedDropdownMenu(
+                modifier = Modifier.background(color = MaterialTheme.colorScheme.surface),
                 expanded = isExposed,
                 onDismissRequest = { isExposed = isExposed.not() }
             ) {

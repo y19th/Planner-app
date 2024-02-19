@@ -105,8 +105,12 @@ fun NavHostContainer(
                     pinId = it.arguments?.getString("pinId") ?: ""
                 )
             }
-            composable(route = Routes.SETTINGS.name,
-                ) {
+            composable(
+                route = Routes.SETTINGS.name,
+                enterTransition = { Animations.slideInWithFadeFromBottom },
+                exitTransition = { Animations.fastFadeOut },
+                popEnterTransition = { Animations.mediumFadeIn }
+            ) {
                 SettingsScreen()
             }
             composable(

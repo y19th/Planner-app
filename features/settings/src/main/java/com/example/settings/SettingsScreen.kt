@@ -1,112 +1,222 @@
 package com.example.settings
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Stable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.example.components.DropDownTextField
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.components.HorizontalSpacer
+import com.example.components.LabelledTextDropDown
+import com.example.components.MainDivider
+import com.example.components.MainTopBar
 import com.example.components.RoundedCoveringButton
 import com.example.components.VerticalSpacer
-import com.example.settings.components.SettingsPart
-import com.example.settings.models.ThemeSetting
+import com.example.domain.events.SettingEvents
+import com.example.domain.models.droppable.Theme
+import com.example.settings.viewmodels.SettingViewModel
 import com.example.ui.R
+import com.example.util.AnimationDuration
 
 @Composable
-fun SettingsScreen() {
+fun SettingsScreen(
+    viewModel: SettingViewModel = hiltViewModel()
+) {
+    val state by viewModel.state.collectAsState()
+
+    var expandedStat by rememberSaveable {
+        mutableStateOf(false)
+    }
+
     Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(start = 16.dp, end = 16.dp, top = 32.dp),
+        verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        Text(
-            text = stringResource(id = R.string.setting_screen),
-            style = MaterialTheme.typography.displaySmall,
-            color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier
-                .padding(top = 16.dp, bottom = 8.dp)
+        MainTopBar(
+            title = stringResource(id = R.string.screen_settings)
+        )
+
+        LabelledTextDropDown(
+            label = stringResource(id = R.string.label_settings_theme),
+            value = stringResource(state.theme.stringId()),
+            dropDownItems = rememberThemeList(),
+            onDropDownClick = {
+                viewModel.onEvent(SettingEvents.OnThemeChange(it))
+            }
         )
 
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    color = MaterialTheme.colorScheme.surfaceVariant,
-                    shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp)
-                )
-                .padding(vertical = 24.dp, horizontal = 20.dp)
+            modifier = Modifier.fillMaxWidth()
         ) {
-            SettingsPart(title = stringResource(id = R.string.settings_theme)) {
-                DropDownTextField(
-                    value = stringResource(id = ThemeSetting.Light.nameId),
-                    labelText = stringResource(id = R.string.setting_title_theme),
-                    dropDownItemsList = receiveThemeListValues(),
-                    onDropDownClick = { /*TODO*/ },
-                    onValueChange = {
+            Text(
+                text = stringResource(id = R.string.label_settings_cache),
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurface
+            )
 
-                    }
-                )
+            VerticalSpacer(height = 4.dp)
 
-                VerticalSpacer(height = 8.dp)
-
-                DropDownTextField(
-                    value = "Red color",
-                    labelText = "Color",
-                    onDropDownClick = { /*TODO*/ },
-                    onValueChange = {
-
-                    }
-                )
-            }
+            Text(
+                text = stringResource(id = R.string.label_settings_cache_desc),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.outline
+            )
 
             VerticalSpacer(height = 16.dp)
-            
-            SettingsPart(title = stringResource(id = R.string.settings_caching)) {
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text(
-                        text = stringResource(id = R.string.setting_cache_size),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )   
-                    Text(
-                        text = stringResource(id = R.string.setting_cache_format, 52.4f),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.tertiary
+
+            LabelledExpandedList(
+                label = stringResource(id = R.string.label_settings_tasks_for_year),
+                isExpanded = expandedStat
+            ) {
+                Column(modifier = Modifier.padding(vertical = 8.dp)) {
+                    ExpandedItem(
+                        title = stringResource(id = R.string.label_settings_tasks_all),
+                        value = state.tasks.size.toString()
+                    )
+
+                    ExpandedItem(
+                        title = stringResource(id = R.string.label_settings_tasks_this_year),
+                        value = state.tasks.size.toString(),
+                        withBottomDivider = false
                     )
                 }
+            }
 
-                VerticalSpacer(height = 12.dp)
+            VerticalSpacer(height = 24.dp)
 
-                RoundedCoveringButton(
-                    onButtonClick = {
-                        /*TODO*/
-                    }
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.setting_cache_clear),
-                        style = MaterialTheme.typography.labelLarge
-                    )
-                }
-
+            RoundedCoveringButton(
+                onButtonClick = { /*TODO*/ }
+            ) {
+                Text(
+                    text = stringResource(id = R.string.label_settings_cache_clear),
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
             }
         }
     }
 }
-@Stable
+
 @Composable
-fun receiveThemeListValues(): List<String> {
-    return ThemeSetting.all().map {
-        stringResource(id = it.nameId)
+fun ExpandedItem(
+    modifier: Modifier = Modifier,
+    title: String = "title",
+    value: String = "value",
+    withBottomDivider: Boolean = true
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = title,
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+
+        HorizontalSpacer(width = 4.dp)
+
+        Text(
+            text = value,
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.primary
+        )
+    }
+
+    if (withBottomDivider) MainDivider()
+}
+
+
+@Composable
+fun LabelledExpandedList(
+    modifier: Modifier = Modifier,
+    isExpanded: Boolean = false,
+    label: String = "label",
+    content: @Composable ColumnScope.() -> Unit
+) {
+    var expanded by rememberSaveable {
+        mutableStateOf(isExpanded)
+    }
+    val trailingAnimation by animateFloatAsState(
+        targetValue = if(expanded) 180f else 0f,
+        label = "trailing animation",
+        animationSpec = tween(durationMillis = AnimationDuration.Medium)
+    )
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                shape = RoundedCornerShape(5.dp)
+            )
+            .clip(RoundedCornerShape(5.dp))
+            .clickable {
+                expanded = expanded.not()
+            }
+            .padding(horizontal = 6.dp, vertical = 8.dp)
+            .then(modifier)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+            ,
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = label,
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+
+            Icon(
+                imageVector = Icons.Default.ArrowDropDown,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.rotate(trailingAnimation)
+            )
+        }
+        AnimatedVisibility(visible = expanded) {
+            content.invoke(this@Column)
+        }
     }
 }
 
+
+
+@Composable
+fun rememberThemeList(): List<Theme> {
+    return rememberSaveable {
+        Theme.receiveAll()
+    }
+}

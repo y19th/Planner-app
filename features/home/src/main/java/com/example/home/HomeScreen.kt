@@ -21,7 +21,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -40,7 +39,7 @@ import com.example.domain.models.droppable.Filter
 import com.example.home.components.TaskItem
 import com.example.home.viewmodels.MainViewModel
 import com.example.ui.R
-import com.example.ui.theme.LocalSnackBarHost
+import com.example.ui.theme.local.LocalSnackBarHost
 import com.example.util.AnimationDuration
 import com.example.util.extension.or
 
