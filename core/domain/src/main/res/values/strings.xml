@@ -9,6 +9,7 @@
     <string name="status_cancelled">Провалено</string>
     <string name="status_in_progress">В процессе</string>
     <string name="status_completed">Выполнено</string>
+    <string name="status_waiting">В ожидании</string>
 
     <string name="bottom_my_tasks">Мои задачи</string>
     <string name="bottom_add_task">Новая задача</string>

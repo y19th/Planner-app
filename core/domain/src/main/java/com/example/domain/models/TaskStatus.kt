@@ -8,14 +8,12 @@ import androidx.compose.ui.graphics.Color
 import com.example.data.models.TaskStatusModel
 import com.example.domain.R
 import com.example.util.extension.onSuccessVariant
-import com.example.util.extension.success
-import com.example.util.extension.successVariant
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
 @Immutable
 enum class TaskStatus : Parcelable {
-    CANCELLED,IN_PROGRESS,COMPLETED;
+    CANCELLED,IN_PROGRESS,COMPLETED,WAITING;
     fun value(): Int {
         return when(this) {
             CANCELLED -> {
@@ -26,6 +24,9 @@ enum class TaskStatus : Parcelable {
             }
             COMPLETED -> {
                 R.string.status_completed
+            }
+            WAITING -> {
+                R.string.status_waiting
             }
         }
     }
@@ -41,6 +42,9 @@ enum class TaskStatus : Parcelable {
             }
             COMPLETED -> {
                 MaterialTheme.colorScheme.onSuccessVariant
+            }
+            WAITING -> {
+                MaterialTheme.colorScheme.outline
             }
         }
     }

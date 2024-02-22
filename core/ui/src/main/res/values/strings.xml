@@ -69,6 +69,11 @@
     <string name="label_settings_tasks_for_year">Записи задач по годам</string>
     <string name="label_settings_tasks_all">Всего записей:</string>
     <string name="label_settings_tasks_this_year">За этот год:</string>
+    <string name="filter_dialog_status_choose">По статусу</string>
+    <string name="filter_dialog_status_erase">Очистить</string>
+    <string name="filter_dialog_pins_choose">По выбранным пинам</string>
+    <string name="filter_dialog_pins_erase">Очистить</string>
+    <string name="filter_dialog_button_ready">Готово</string>
 
     <plurals name="day">
         <item quantity="zero">ни одного дня</item>

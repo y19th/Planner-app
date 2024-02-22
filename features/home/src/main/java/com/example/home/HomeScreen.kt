@@ -2,6 +2,7 @@ package com.example.home
 
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,8 +22,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.pluralStringResource
@@ -31,8 +36,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.components.TextDropDown
 import com.example.components.MainDivider
+import com.example.components.TextDropDown
 import com.example.domain.events.MainEvent
 import com.example.domain.models.ElapsedTime
 import com.example.domain.models.droppable.Filter
@@ -41,6 +46,8 @@ import com.example.home.viewmodels.MainViewModel
 import com.example.ui.R
 import com.example.ui.theme.local.LocalSnackBarHost
 import com.example.util.AnimationDuration
+import com.example.util.extension.contains
+import com.example.util.extension.containsEmpty
 import com.example.util.extension.or
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -51,10 +58,30 @@ fun HomeScreen(
     navController: NavController
 ) {
 
-    val state = viewModel.state.collectAsState().value
+    val state by viewModel.state.collectAsState()
     val snackbarHost = LocalSnackBarHost.current
     val coroutineScope = rememberCoroutineScope()
     val filterItems = rememberFilterItems()
+
+
+    val filteredTasks by remember(state.selectedStatuses,state.selectedPins) {
+        mutableStateOf(
+            with(state) {
+                if(selectedStatuses.isNotEmpty() || selectedPins.isNotEmpty()) {
+                    taskList.filter { model ->
+                        selectedStatuses.containsEmpty(model.status) &&
+                                selectedPins.contains(model.taskPin)
+                    }
+                } else {
+                    taskList
+                }
+            }
+        )
+    }
+
+    var isFilterExpanded by remember {
+        mutableStateOf(false)
+    }
 
     LaunchedEffect(null) {
         viewModel.onEvent(MainEvent.OnRefresh)
@@ -94,6 +121,10 @@ fun HomeScreen(
                 }
             )
             Row (
+                modifier = Modifier
+                    .clickable {
+                        isFilterExpanded = isFilterExpanded.not()
+                    },
                 verticalAlignment = Alignment.CenterVertically
             ){
                 Icon(
@@ -115,7 +146,7 @@ fun HomeScreen(
             verticalArrangement = Arrangement.spacedBy(26.dp)
         ) {
             items(
-                items = state.taskList,
+                items = filteredTasks,
                 key = { it.id }
             ) {
                 TaskItem(
@@ -136,11 +167,21 @@ fun HomeScreen(
                 )
             }
         }
+
+        if(isFilterExpanded) {
+            FilterDialog(
+                onDismiss = {
+                    isFilterExpanded = false
+                },
+                onEvent = viewModel::onEvent,
+                state = viewModel.filterState.collectAsState().value
+            )
+        }
     }
 }
 
 @Composable
-fun calculateDateDiff(elapsedTime: ElapsedTime): String {
+private fun calculateDateDiff(elapsedTime: ElapsedTime): String {
     val strDay = pluralStringResource(
         id = R.plurals.day,
         count = elapsedTime.days.toInt(),
@@ -177,7 +218,6 @@ fun calculateDateDiff(elapsedTime: ElapsedTime): String {
         "$strMinute $strSecond"
     }
 }
-
 
 @Stable
 @Composable
