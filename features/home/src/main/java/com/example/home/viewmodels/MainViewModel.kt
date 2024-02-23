@@ -150,6 +150,22 @@ class MainViewModel @Inject constructor(
                     )
                 }
             }
+            is MainEvent.OnClearFilter -> {
+                _filterState.update {
+                    it.copy(
+                        selectedPins = emptyList(),
+                        selectedStatuses = emptyList()
+                    )
+                }
+            }
+            is MainEvent.OnFilterCopy -> {
+                _filterState.update {
+                    it.copy(
+                        selectedPins = state.value.selectedPins,
+                        selectedStatuses = state.value.selectedStatuses
+                    )
+                }
+            }
         }
     }
 

@@ -13,8 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Share
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -30,12 +29,14 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.components.HorizontalSpacer
 import com.example.components.MainDivider
 import com.example.components.TextDropDown
 import com.example.domain.events.MainEvent
@@ -49,6 +50,7 @@ import com.example.util.AnimationDuration
 import com.example.util.extension.contains
 import com.example.util.extension.containsEmpty
 import com.example.util.extension.or
+import com.example.util.extension.vector
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -79,7 +81,7 @@ fun HomeScreen(
         )
     }
 
-    var isFilterExpanded by remember {
+    var isFilterDialogExpanded by remember {
         mutableStateOf(false)
     }
 
@@ -122,17 +124,21 @@ fun HomeScreen(
             )
             Row (
                 modifier = Modifier
+                    .clip(RoundedCornerShape(5.dp))
                     .clickable {
-                        isFilterExpanded = isFilterExpanded.not()
-                    },
+                        isFilterDialogExpanded = isFilterDialogExpanded.not()
+                    }
+                    .padding(vertical = 4.dp, horizontal = 2.dp)
+                ,
                 verticalAlignment = Alignment.CenterVertically
             ){
                 Icon(
                     /*TODO replace with correct icon*/
-                    imageVector = Icons.Filled.Share,
+                    imageVector = vector(res = R.drawable.ic_filter),
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onSurface
                 )
+                HorizontalSpacer(width = 6.dp)
                 Text(
                     text = stringResource(id = R.string.filters),
                     style = MaterialTheme.typography.labelMedium,
@@ -168,10 +174,11 @@ fun HomeScreen(
             }
         }
 
-        if(isFilterExpanded) {
+        if(isFilterDialogExpanded) {
             FilterDialog(
                 onDismiss = {
-                    isFilterExpanded = false
+                    isFilterDialogExpanded = false
+                    viewModel.onEvent(MainEvent.OnClearFilter)
                 },
                 onEvent = viewModel::onEvent,
                 state = viewModel.filterState.collectAsState().value

@@ -13,6 +13,10 @@ sealed interface MainEvent {
 
     data object OnErasePins: MainEvent
 
+    data object OnClearFilter: MainEvent
+
+    data object OnFilterCopy: MainEvent
+
     data object OnSaveFilter: MainEvent
 
     data class OnTaskDone(val taskId: Int) : MainEvent
