@@ -1,13 +1,13 @@
 package com.example.domain.states
 
+import androidx.compose.runtime.Stable
 import com.example.domain.models.TaskModel
 import com.example.domain.models.TaskPin
 import com.example.domain.models.TaskStatus
 import com.example.domain.models.droppable.Filter
-import javax.annotation.concurrent.Immutable
 
 
-@Immutable
+@Stable
 data class MainState(
     val isLoading: Boolean = true,
     val taskList: List<TaskModel> = listOf(),

@@ -15,6 +15,7 @@ fun LinedTimePicker(
     modifier: Modifier = Modifier,
     title: String = "from",
     value: String = "",
+    errorText: String? = null,
     onValueChange: (Int,Int) -> Unit
 ) {
     Row(
@@ -36,6 +37,13 @@ fun LinedTimePicker(
             modifier = Modifier.weight(0.65f),
             text = value,
             onValueChange = onValueChange
+        )
+    }
+    if(!errorText.isNullOrEmpty()) {
+        Text(
+            text = errorText,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.error
         )
     }
 }

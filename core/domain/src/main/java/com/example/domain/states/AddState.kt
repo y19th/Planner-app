@@ -1,6 +1,7 @@
 package com.example.domain.states
 
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
 import com.example.data.models.TaskTimeModel
 import com.example.domain.models.TaskPin
 
@@ -15,9 +16,11 @@ data class AddState(
 
 
     val isValid: Boolean = false,
-    val isUpdated: Boolean = false
+    val isUpdated: Boolean = false,
+    val isTimeError: Boolean = false
 )
 
+@Stable
 data class TaskTime(
     val hour: Int = 0,
     val minute: Int = 0
@@ -31,6 +34,15 @@ data class TaskTime(
 
     fun toMillis(): Long {
         return (hour * 3600L + minute * 60L) * 1000L
+    }
+
+    fun moreThan(other: TaskTime?): Boolean {
+        if(other == null) return false
+        if(this.hour > other.hour) return true
+        if(this.hour < other.hour) return false
+        if(this.hour == other.hour && this.minute > other.minute) return true
+        if(this.hour == other.hour && this.minute < other.minute) return false
+        return false
     }
 }
 

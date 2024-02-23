@@ -96,6 +96,7 @@ class MainViewModel @Inject constructor(
                         taskList = sortByFilter(selectedFilter = event.newValue)
                     )
                 }
+                event.lazyListJob.start()
             }
             is MainEvent.OnFilterStatusChanged -> {
                 val statuses = filterState.value.selectedStatuses.toMutableList()

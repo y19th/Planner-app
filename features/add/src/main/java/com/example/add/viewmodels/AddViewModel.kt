@@ -5,15 +5,13 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.events.AddEvents
-import com.example.domain.models.droppable.Importance
 import com.example.domain.models.TaskModel
 import com.example.domain.models.TaskPin
+import com.example.domain.models.droppable.Importance
 import com.example.domain.models.nav.Routes
-import com.example.domain.models.toListTaskPin
 import com.example.domain.states.AddState
 import com.example.domain.states.PinState
 import com.example.domain.states.TaskTime
-import com.example.domain.states.toTaskTime
 import com.example.domain.usecase.RoomUseCase
 import com.example.util.extension.adaptive
 import com.example.util.extension.toColor
@@ -56,6 +54,7 @@ class AddViewModel @Inject constructor(
                 _state.update { it.copy(
                     taskTimeFrom = TaskTime(hour = event.newHour, minute = event.newMinute)
                 ) }
+                timeValidCheck()
                 updateValid()
             }
 
@@ -63,6 +62,7 @@ class AddViewModel @Inject constructor(
                 _state.update { it.copy(
                     taskTimeTo = TaskTime(hour = event.newHour, minute = event.newMinute)
                 ) }
+                timeValidCheck()
                 updateValid()
             }
 
@@ -212,6 +212,15 @@ class AddViewModel @Inject constructor(
         }
     }
 
+    private fun timeValidCheck(){
+        _state.update {
+            it.copy(
+                isTimeError = state.value.taskTimeTo?.moreThan(state.value.taskTimeFrom) == false
+            )
+        }
+    }
+
+
     private fun pinStateToDefault() {
         _pinState.update {
             it.copy(
@@ -232,7 +241,7 @@ class AddViewModel @Inject constructor(
     private fun checkValidFields(): Boolean {
         with(state.value) {
             return taskTitle.isNotEmpty() && taskDescription.isNotEmpty() && taskDate != 0L
-                    && taskTimeFrom != null && taskTimeTo != null
+                    && taskTimeFrom != null && taskTimeTo != null && isTimeError.not()
         }
     }
 

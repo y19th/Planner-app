@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -51,6 +52,7 @@ import com.example.util.extension.contains
 import com.example.util.extension.containsEmpty
 import com.example.util.extension.or
 import com.example.util.extension.vector
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -64,9 +66,16 @@ fun HomeScreen(
     val snackbarHost = LocalSnackBarHost.current
     val coroutineScope = rememberCoroutineScope()
     val filterItems = rememberFilterItems()
+    val lazyState = rememberLazyListState()
+
+    val animateToStart = run {
+        coroutineScope.launch {
+            lazyState.scrollToItem(0)
+        }
+    }
 
 
-    val filteredTasks by remember(state.selectedStatuses,state.selectedPins) {
+    val filteredTasks by remember(state.selectedStatuses,state.selectedPins, state.taskList) {
         mutableStateOf(
             with(state) {
                 if(selectedStatuses.isNotEmpty() || selectedPins.isNotEmpty()) {
@@ -118,8 +127,10 @@ fun HomeScreen(
                 value = state.selectedFilter,
                 iconRes = R.drawable.ic_filter_arrow_bottom,
                 dropDownList = filterItems,
-                onDropDownClick = {
-                    viewModel.onEvent(MainEvent.OnTaskFilterChanged(it))
+                onDropDownClick = { filter ->
+                    viewModel.onEvent(
+                        MainEvent.OnTaskFilterChanged(filter, animateToStart)
+                    )
                 }
             )
             Row (
@@ -133,7 +144,6 @@ fun HomeScreen(
                 verticalAlignment = Alignment.CenterVertically
             ){
                 Icon(
-                    /*TODO replace with correct icon*/
                     imageVector = vector(res = R.drawable.ic_filter),
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onSurface
@@ -148,6 +158,7 @@ fun HomeScreen(
         }
 
         LazyColumn(
+            state = lazyState,
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(26.dp)
         ) {

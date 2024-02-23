@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -45,6 +44,7 @@ import com.example.domain.models.TaskModel
 import com.example.domain.models.TaskPin
 import com.example.ui.R
 import com.example.util.DateFormat
+import com.example.util.extension.orNull
 import com.example.util.extension.toDate
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -178,11 +178,14 @@ fun AddScreen(
                 LinedTimePicker(
                     title = stringResource(id = R.string.label_time_to),
                     value = state.taskTimeTo?.toString() ?: "",
-                    onValueChange = { hour,minute ->
-                        viewModel.onEvent(AddEvents.OnTimeToChange(
-                            newHour = hour,
-                            newMinute = minute
-                        ))
+                    errorText = stringResource(id = R.string.time_to_error).orNull(state.isTimeError),
+                    onValueChange = { hour, minute ->
+                        viewModel.onEvent(
+                            AddEvents.OnTimeToChange(
+                                newHour = hour,
+                                newMinute = minute
+                            )
+                        )
                     }
                 )
             }

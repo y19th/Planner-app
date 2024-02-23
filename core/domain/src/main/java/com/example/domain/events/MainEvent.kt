@@ -4,6 +4,7 @@ import androidx.navigation.NavController
 import com.example.domain.models.TaskPin
 import com.example.domain.models.TaskStatus
 import com.example.domain.models.droppable.Filter
+import kotlinx.coroutines.Job
 
 sealed interface MainEvent {
 
@@ -25,7 +26,7 @@ sealed interface MainEvent {
 
     data class OnTaskDelete(val taskId: Int): MainEvent
 
-    data class OnTaskFilterChanged(val newValue: Filter): MainEvent
+    data class OnTaskFilterChanged(val newValue: Filter, val lazyListJob: Job): MainEvent
 
     data class OnFilterStatusChanged(val clickedChip: TaskStatus, val selectedNow: Boolean): MainEvent
 

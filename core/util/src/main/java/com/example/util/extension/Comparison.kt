@@ -4,6 +4,10 @@ fun <T> T.or(statement: Boolean, another: T): T {
     return if(statement) this else another
 }
 
+fun <T> T.orNull(statement: Boolean): T? {
+    return if(statement) this else null
+}
+
 fun <T> Collection<T>.contains(other: Collection<T>): Boolean {
     if(this.isEmpty()) return true
     for(elem in this) {
