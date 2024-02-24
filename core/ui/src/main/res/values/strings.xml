@@ -75,6 +75,7 @@
     <string name="filter_dialog_pins_erase">Очистить</string>
     <string name="filter_dialog_button_ready">Готово</string>
     <string name="time_to_error">Время конца не может быть меньше времени начала</string>
+    <string name="home_stub">На сегодня нет ни одной задачи</string>
 
     <plurals name="day">
         <item quantity="zero">ни одного дня</item>

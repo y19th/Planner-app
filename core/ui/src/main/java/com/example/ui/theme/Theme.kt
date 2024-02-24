@@ -32,6 +32,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.domain.models.droppable.Theme
 import com.example.domain.models.nav.Destinations
 import com.example.domain.models.nav.Routes
 import com.example.ui.theme.local.LocalSnackBarHost
@@ -80,23 +81,21 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun MainTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
+    theme: Theme = Theme.Light,
     dynamicColor: Boolean = false,
     content: @Composable (PaddingValues, NavHostController) -> Unit
 ) {
 
     val navController = rememberNavController()
-
-
-
-
+/*
     val colorScheme = when {
-       /* dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+       *//* dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }*/
+        }*//*
 
         darkTheme -> {
-            /*TODO dark colors of success*/
+            *//*TODO dark colors of success*//*
             DarkColorScheme.apply {
                 success = Success
                 onSuccess = OnSuccess
@@ -110,7 +109,35 @@ fun MainTheme(
             successVariant = SuccessContainer
             onSuccessVariant = OnSuccessContainer
         }
+    }*/
+    val colorScheme = when(theme) {
+        is Theme.Light -> {
+            LightColorScheme.apply {
+                success = Success
+                onSuccess = OnSuccess
+                successVariant = SuccessContainer
+                onSuccessVariant = OnSuccessContainer
+            }
+        }
+        is Theme.Dark -> {
+            DarkColorScheme.apply {
+                success = Success
+                onSuccess = OnSuccess
+                successVariant = SuccessContainer
+                onSuccessVariant = OnSuccessContainer
+            }
+        }
+        is Theme.System -> {
+            DarkColorScheme.apply {
+                success = Success
+                onSuccess = OnSuccess
+                successVariant = SuccessContainer
+                onSuccessVariant = OnSuccessContainer
+            }
+        }
     }
+
+
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {

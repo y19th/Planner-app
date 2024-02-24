@@ -46,11 +46,13 @@ dependencies {
 
     val daggerVersion = "2.48"
 
+    implementation(project(":core:data"))
     implementation(project(":core:ui"))
     implementation(project(":core:domain"))
     implementation(project(":core:components"))
     implementation(project(":core:util"))
 
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     //hilt
     implementation ("com.google.dagger:hilt-android:$daggerVersion")

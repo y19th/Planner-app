@@ -48,6 +48,7 @@ dependencies {
     implementation(project(":core:data"))
     implementation(project(":core:util"))
 
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     //dagger
     implementation("com.google.dagger:dagger:$daggerVersion")

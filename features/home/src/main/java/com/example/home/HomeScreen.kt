@@ -43,6 +43,7 @@ import com.example.components.TextDropDown
 import com.example.domain.events.MainEvent
 import com.example.domain.models.ElapsedTime
 import com.example.domain.models.droppable.Filter
+import com.example.home.components.HomeStub
 import com.example.home.components.TaskItem
 import com.example.home.viewmodels.MainViewModel
 import com.example.ui.R
@@ -157,31 +158,37 @@ fun HomeScreen(
             }
         }
 
-        LazyColumn(
-            state = lazyState,
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(26.dp)
-        ) {
-            items(
-                items = filteredTasks,
-                key = { it.id }
+        if(filteredTasks.isEmpty()) {
+            HomeStub()
+        } else {
+            LazyColumn(
+                state = lazyState,
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(26.dp)
             ) {
-                TaskItem(
-                    modifier = Modifier.animateItemPlacement(
-                        animationSpec = tween(AnimationDuration.Fast)
-                    ),
-                    model = it,
-                    onEvent = viewModel::onEvent,
-                    deadLine = calculateDateDiff(
-                        viewModel.calculateDateDiff(it)
-                    ),
-                    onChangeTaskEvent = {
-                        viewModel.onEvent(MainEvent.OnTaskChange(
-                            navController = navController,
-                            taskId = it.id
-                        ))
-                    }
-                )
+                items(
+                    items = filteredTasks,
+                    key = { it.id }
+                ) {
+                    TaskItem(
+                        modifier = Modifier.animateItemPlacement(
+                            animationSpec = tween(AnimationDuration.Fast)
+                        ),
+                        model = it,
+                        onEvent = viewModel::onEvent,
+                        deadLine = calculateDateDiff(
+                            viewModel.calculateDateDiff(it)
+                        ),
+                        onChangeTaskEvent = {
+                            viewModel.onEvent(
+                                MainEvent.OnTaskChange(
+                                    navController = navController,
+                                    taskId = it.id
+                                )
+                            )
+                        }
+                    )
+                }
             }
         }
 
@@ -195,6 +202,7 @@ fun HomeScreen(
                 state = viewModel.filterState.collectAsState().value
             )
         }
+
     }
 }
 

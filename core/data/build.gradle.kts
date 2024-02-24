@@ -46,6 +46,8 @@ dependencies {
 
     val daggerVersion = "2.48"
 
+    implementation(project(":core:util"))
+
     //room
     implementation ("androidx.room:room-runtime:$roomVersion")
     implementation ("androidx.room:room-ktx:$roomVersion")
@@ -65,6 +67,8 @@ dependencies {
 
     //gson
     implementation("com.google.code.gson:gson:2.10.1")
+
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
 
 
     implementation(platform("androidx.compose:compose-bom:$composeBomVersion"))

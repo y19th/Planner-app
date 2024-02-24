@@ -11,7 +11,12 @@ import kotlinx.parcelize.Parcelize
 sealed class Theme(val value: Int) : Parcelable,Droppable {
 
     companion object {
+
         fun receiveAll() = listOf(System,Dark,Light)
+
+        fun find(value: Int): Theme {
+            return Dark.find(value) as Theme
+        }
     }
 
 

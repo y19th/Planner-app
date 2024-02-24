@@ -49,6 +49,7 @@ dependencies {
 
 
     implementation("androidx.navigation:navigation-compose:$navigationVersion")
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     implementation(platform("androidx.compose:compose-bom:$composeBomVersion"))
     implementation("androidx.compose.ui:ui")
