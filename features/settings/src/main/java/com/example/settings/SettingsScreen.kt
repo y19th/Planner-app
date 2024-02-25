@@ -38,6 +38,7 @@ import com.example.components.MainTopBar
 import com.example.components.RoundedCoveringButton
 import com.example.components.VerticalSpacer
 import com.example.domain.events.SettingEvents
+import com.example.domain.models.TaskStatus
 import com.example.domain.models.droppable.Theme
 import com.example.settings.viewmodels.SettingViewModel
 import com.example.ui.R
@@ -93,18 +94,33 @@ fun SettingsScreen(
 
             LabelledExpandedList(
                 label = stringResource(id = R.string.label_settings_tasks_for_year),
-                isExpanded = expandedStat
+                expanded = expandedStat,
+                onDismiss = { expandedStat = expandedStat.not() }
             ) {
                 Column(modifier = Modifier.padding(vertical = 8.dp)) {
                     ExpandedItem(
                         title = stringResource(id = R.string.label_settings_tasks_all),
                         value = state.tasks.size.toString()
                     )
-
                     ExpandedItem(
                         title = stringResource(id = R.string.label_settings_tasks_this_year),
                         value = state.tasks.size.toString(),
                         withBottomDivider = false
+                    )
+
+                    VerticalSpacer(height = 16.dp)
+
+                    ExpandedItem(
+                        title = stringResource(id = R.string.label_settings_tasks_success),
+                        value = state.tasks.filter { model ->
+                            model.status == TaskStatus.COMPLETED
+                        }.size.toString()
+                    )
+                    ExpandedItem(
+                        title = stringResource(id = R.string.label_settings_tasks_cancelled),
+                        value = state.tasks.filter { model ->
+                            model.status == TaskStatus.CANCELLED
+                        }.size.toString()
                     )
                 }
             }
@@ -134,7 +150,8 @@ fun ExpandedItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp),
+            .padding(vertical = 4.dp)
+            .then(modifier),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
@@ -159,13 +176,12 @@ fun ExpandedItem(
 @Composable
 fun LabelledExpandedList(
     modifier: Modifier = Modifier,
-    isExpanded: Boolean = false,
+    onDismiss: () -> Unit,
+    expanded: Boolean = false,
     label: String = "label",
     content: @Composable ColumnScope.() -> Unit
 ) {
-    var expanded by rememberSaveable {
-        mutableStateOf(isExpanded)
-    }
+
     val trailingAnimation by animateFloatAsState(
         targetValue = if(expanded) 180f else 0f,
         label = "trailing animation",
@@ -181,7 +197,7 @@ fun LabelledExpandedList(
             )
             .clip(RoundedCornerShape(5.dp))
             .clickable {
-                expanded = expanded.not()
+                onDismiss.invoke()
             }
             .padding(horizontal = 6.dp, vertical = 8.dp)
             .then(modifier)

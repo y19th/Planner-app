@@ -47,10 +47,10 @@ import com.example.components.LabelledTextField
 import com.example.components.RoundedCoveringButton
 import com.example.components.VerticalSpacer
 import com.example.domain.events.AddEvents
-import com.example.domain.models.droppable.Importance
 import com.example.domain.models.TaskPin
+import com.example.domain.models.droppable.Importance
 import com.example.ui.R
-import com.example.ui.theme.Success
+import com.example.util.extension.success
 import com.example.util.extension.toColor
 
 @Composable
@@ -215,7 +215,7 @@ fun PinAddScreen(
         }
         if(dialogExposed) {
             ColorPickerBottomSheet(
-                initialColor = Success,
+                initialColor = MaterialTheme.colorScheme.success,
                 onColorChange = {
                     viewModel.onEvent(
                         AddEvents.OnPinColorChange(newValue = it.toArgb())

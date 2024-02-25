@@ -66,9 +66,11 @@
     <string name="label_settings_cache">Локальный кэш приложения</string>
     <string name="label_settings_cache_desc">Здесь можно очистить память, занимаемую приложением для хранения ваших задач</string>
     <string name="label_settings_cache_clear">Очистить память</string>
-    <string name="label_settings_tasks_for_year">Записи задач по годам</string>
+    <string name="label_settings_tasks_for_year">Статистика</string>
     <string name="label_settings_tasks_all">Всего записей:</string>
     <string name="label_settings_tasks_this_year">За этот год:</string>
+    <string name="label_settings_tasks_success">Выполненных задач</string>
+    <string name="label_settings_tasks_cancelled">Проваленных задач</string>
     <string name="filter_dialog_status_choose">По статусу</string>
     <string name="filter_dialog_status_erase">Очистить</string>
     <string name="filter_dialog_pins_choose">По выбранным пинам</string>
