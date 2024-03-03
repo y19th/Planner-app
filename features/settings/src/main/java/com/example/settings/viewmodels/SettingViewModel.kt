@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingViewModel @Inject constructor(
-    roomUseCase: RoomUseCase,
+    private val roomUseCase: RoomUseCase,
     private val dataStore: SettingsDataStore
 ) : ViewModel() {
 
@@ -28,7 +28,6 @@ class SettingViewModel @Inject constructor(
         viewModelScope.launch {
             _state.update {
                 it.copy(
-                    tasks = roomUseCase.receiveTasks(),
                     theme = Theme.find(dataStore.readTheme())
                 )
             }
@@ -38,6 +37,15 @@ class SettingViewModel @Inject constructor(
 
     fun onEvent(event: SettingEvents) {
         when(event) {
+            is SettingEvents.OnRefreshTasks -> {
+                viewModelScope.launch {
+                    _state.update {
+                        it.copy(
+                            tasks = roomUseCase.receiveTasks()
+                        )
+                    }
+                }
+            }
             is SettingEvents.OnThemeChange -> {
                 _state.update { it.copy(theme = event.newValue) }
                 viewModelScope.launch {

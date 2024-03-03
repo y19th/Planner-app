@@ -19,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -52,6 +53,10 @@ fun SettingsScreen(
 
     var expandedStat by rememberSaveable {
         mutableStateOf(false)
+    }
+
+    LaunchedEffect(null) {
+        viewModel.onEvent(SettingEvents.OnRefreshTasks)
     }
 
     Column(
@@ -120,7 +125,8 @@ fun SettingsScreen(
                         title = stringResource(id = R.string.label_settings_tasks_cancelled),
                         value = state.tasks.filter { model ->
                             model.status == TaskStatus.CANCELLED
-                        }.size.toString()
+                        }.size.toString(),
+                        withBottomDivider = false
                     )
                 }
             }

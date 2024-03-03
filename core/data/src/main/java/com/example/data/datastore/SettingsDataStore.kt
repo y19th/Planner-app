@@ -17,9 +17,7 @@ class SettingsDataStoreImpl @Inject constructor(
     private val dataStore: DataStore<Preferences>,
     dispatcher: CoroutineDispatcher = Dispatchers.IO
 ): SettingsDataStore {
-    private val coreContext = dispatcher + Handler.coroutineExceptionHandler
-
-
+    private val coreContext = Handler.context(dispatcher)
 
     private val themeKey = intPreferencesKey("settings_theme_key")
 

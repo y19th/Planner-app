@@ -1,10 +1,10 @@
 package com.example.components
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -58,6 +58,7 @@ fun <T: Droppable> TextDropDown(
         }
 
         DropdownMenu(
+            modifier = Modifier.background(color = MaterialTheme.colorScheme.surface),
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {

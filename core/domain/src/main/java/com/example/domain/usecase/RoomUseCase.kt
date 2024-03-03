@@ -15,7 +15,7 @@ class RoomUseCase @Inject constructor(
     defaultDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
 
-    private val coreContext = defaultDispatcher + Handler.coroutineExceptionHandler
+    private val coreContext = Handler.context(defaultDispatcher)
 
 
     suspend fun receiveTasks() = withContext(coreContext) {

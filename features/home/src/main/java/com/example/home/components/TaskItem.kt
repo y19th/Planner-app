@@ -21,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.components.HorizontalSpacer
-import com.example.components.MainDivider
 import com.example.components.Pin
 import com.example.components.RoundedCoveringButton
 import com.example.components.VerticalSpacer
@@ -155,7 +154,7 @@ fun TaskItem(
         }
     }
 
-    VerticalSpacer(height = 26.dp)
+    VerticalSpacer(height = 12.dp)
 
-    MainDivider()
+    //MainDivider(height = 1.dp)
 }

@@ -110,7 +110,7 @@ fun FilterDialog(
                 )
             }
 
-            VerticalSpacer(height = 32.dp)
+            VerticalSpacer(height = 64.dp)
         }
     }
 }
@@ -149,9 +149,12 @@ private fun FilterDialogPinsItem(
             )
         }
 
-        VerticalSpacer(height = 8.dp)
+        VerticalSpacer(height = 12.dp)
 
-        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        FlowRow(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
             repeat(items.size) {
                 PinChip(
                     value = items.elementAt(it),
@@ -206,10 +209,11 @@ private fun FilterDialogStatusItem(
             )
         }
 
-        VerticalSpacer(height = 8.dp)
+        VerticalSpacer(height = 12.dp)
 
         FlowRow(
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             repeat(items.size) {
                 StatusChip(
