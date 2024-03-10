@@ -1,4 +1,4 @@
-package com.example.home.components
+package com.example.home.presentation.components
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background

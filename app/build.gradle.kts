@@ -62,6 +62,8 @@ dependencies {
     val composeBomVersion = "2023.10.01"
     val navigationVersion = "2.7.6"
     val daggerVersion = "2.48"
+    val workVersion = "2.9.0"
+
 
 
 
@@ -76,6 +78,10 @@ dependencies {
     implementation(project(":features:settings"))
     implementation(project(":features:splash"))
 
+
+    //workmanager
+    implementation("androidx.work:work-runtime-ktx:$workVersion")
+
     implementation("androidx.navigation:navigation-compose:$navigationVersion")
 
     //dagger
@@ -84,7 +90,8 @@ dependencies {
     ksp("com.google.dagger:dagger-compiler:$daggerVersion")
     //hilt
     implementation ("com.google.dagger:hilt-android:$daggerVersion")
-    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    implementation("androidx.hilt:hilt-work:1.2.0")
     ksp ("com.google.dagger:hilt-compiler:$daggerVersion")
 
     implementation("androidx.core:core-ktx:1.12.0")

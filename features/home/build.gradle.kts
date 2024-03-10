@@ -43,16 +43,24 @@ android {
 dependencies {
 
     val daggerVersion = "2.48"
+    val workVersion = "2.9.0"
+
 
     implementation(project(":core:ui"))
     implementation(project(":core:domain"))
     implementation(project(":core:components"))
     implementation(project(":core:util"))
 
+    //workmanager
+    implementation("androidx.work:work-runtime-ktx:$workVersion")
+    implementation("androidx.startup:startup-runtime:1.1.0")
+
+
 
     //hilt
     implementation ("com.google.dagger:hilt-android:$daggerVersion")
-    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    implementation("androidx.hilt:hilt-work:1.2.0")
     ksp ("com.google.dagger:hilt-compiler:$daggerVersion")
 
     implementation("androidx.compose.material3:material3:1.1.2")
